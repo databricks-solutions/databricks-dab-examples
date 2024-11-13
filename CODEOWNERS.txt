@@ -1,1 +1,2 @@
+/flights-simple @dustinvannoy-db
 /dais-2024-dab-mod-orch-template @daboncanplay

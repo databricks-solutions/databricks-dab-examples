@@ -1,0 +1,29 @@
+resources:
+  pipelines:
+    flights_simple_dlt:
+      name: flights_simple_dlt_${bundle.target}
+      configuration:
+        var.source_path: /databricks-datasets/airlines
+        artifact_path: ${workspace.file_path}/src
+      libraries:
+        - notebook:
+            path: ../../src/flights_main_dlt.py
+      target: ${var.flights_dlt_schema}
+      development: false
+      catalog: main
+      serverless: true
+      # data_sampling: false
+  
+  jobs:
+    flights_dlt_job:
+      name: flights_dlt_job_${bundle.target}
+
+      tasks:
+        - task_key: run_flights_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.flights_simple_dlt.id}
+          max_retries: 0
+
+      # schedule:
+      #   quartz_cron_expression: '0 30 19 * * ?'
+      #   timezone_id: America/Los_Angeles 

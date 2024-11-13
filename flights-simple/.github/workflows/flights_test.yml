@@ -1,0 +1,97 @@
+name: Deploy flights_project to TEST
+
+concurrency: 1
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - dev
+    paths:
+      - "**/*.yml"
+      - "**/*.py"
+
+  #push:
+  #  branches:
+  #    - fix/yyyymmdd
+  #  paths:
+  #    - "**/*.yml"
+  #    - "**/*.py"
+
+jobs:
+  deploy:
+    name: "Test and deploy bundle"
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: .
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt -r dev-requirements.txt
+
+      #----------------------------------------------
+      #              run test suite
+      #----------------------------------------------
+      - name: Run unit tests
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          DATABRICKS_CLUSTER_ID: ${{ secrets.DATABRICKS_CLUSTER_ID }}
+        run: |
+          pytest tests/ 
+      
+      - uses: databricks/setup-cli@main
+
+      - run: databricks bundle deploy --target test_automated
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          DATABRICKS_BUNDLE_ENV: tst
+
+  validation:
+    name: "Run validation"
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: .
+
+    needs:
+      - deploy
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: databricks/setup-cli@main
+
+      - shell: bash
+        name: Run notebook validation
+        run: |
+          set -o pipefail
+          databricks bundle run notebook_validation_job -t test_automated --refresh-all 2>&1 | tee output.log
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          DATABRICKS_BUNDLE_ENV: tst
+
+      # - shell: bash
+      #   name: Run pipeline validation
+      #   run: |
+      #     set -o pipefail
+      #     databricks bundle run flights_simple_dlt_validation -t test_automated
+      #   env:
+      #     DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      #     DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+      #     DATABRICKS_BUNDLE_ENV: tst
