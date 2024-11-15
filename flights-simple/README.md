@@ -41,7 +41,7 @@ Various types of jobs are demonstrated in the `resources` directory.
    $ databricks bundle deploy --target prod
    ```
 
-5. To run a job or pipeline, use the "run" comand:
+5. To run a job or pipeline, use the "run" command:
    ```
    $ databricks bundle run notebook_validation_job
    ```
