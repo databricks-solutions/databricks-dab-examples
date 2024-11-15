@@ -8,12 +8,12 @@ of DAB functionality and best practices for developer workflow and CI/CD (Contin
 
 The repository is organized into multiple folders, each representing a distinct project:
 - [`dais-2024-dab-mod-orch-template`](dais-2024-dab-mod-orch-template): Simple template for DAB
-- [`flights-simple`](flights-simple): simple end to end project with workflows & DLT, source code (simple library), tests 
+- [`flights-simple`](flights-simple): Simple end to end project with workflows & DLT, source code (simple library), tests 
 (unit & integration), and GH actions pipeline
 
 
 ## Getting Started
-The structure of each of the folders varies according to the purpuse of the project, but will include:
+The structure of each of the folders varies according to the purpose of the project, but will include:
 - A `README.md` with specific instructions
 - Configuration files (such as a `databricks.yml` file defining the bundle, other YAMLs for resources)
 - Source and test code
