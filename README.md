@@ -9,6 +9,7 @@ of DAB functionality and best practices for developer workflow and CI/CD (Contin
 The repository is organized into multiple folders, each representing a distinct project:
 - [`dais-2024-dab-mod-orch-template`](dais-2024-dab-mod-orch-template): Simple template for DAB
 - [`flights-simple`](flights-simple): Simple end to end project with workflows & DLT, source code (simple library), tests 
+- [`flights-bundle-template`](flights-bundle-template): Bundle template to deploy the same [`flights-simple`](flights-simple) in different flavours: classic or serverless, library packed as wheel or not 
 (unit & integration), and GH actions pipeline
 
 

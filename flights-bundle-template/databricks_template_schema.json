@@ -1,0 +1,23 @@
+{
+   "properties": {
+      "project_name": {
+         "type": "string",
+         "default": "flights-gen-bundle",
+         "description": "What is the name of the bundle you want to create?",
+         "order": 1
+      },
+      "generate_wheels": {
+         "type": "boolean",
+         "default": false,
+         "description": "Do you want that the repo libraries generate wheels?",
+         "order": 2
+      },
+      "serverless_jobs": {
+         "type": "boolean",
+         "default": false,
+         "description": "Do you want that the Databricks workflows run in serverless?",
+         "order": 2
+      }
+   },
+   "success_message": "\nYour bundle '{{.project_name}}' has been created."
+}
