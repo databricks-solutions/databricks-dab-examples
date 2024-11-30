@@ -1,6 +1,8 @@
 # flights-bundle-template
 
-Template on top of the 'flights_simple' project, able to deploy it either with wheels or not, either serverless or not 
+Template on top of the 'flights_simple' project to enable the following deployment options:
+1. Wheels or relative imports for the project's Python modules
+2. Serverless compute or classic compute for workflows
 
 ## resources
 Only a template for one type of job is demonstrated right now in the `resources` directory.
@@ -23,15 +25,15 @@ Only a template for one type of job is demonstrated right now in the `resources`
    Example:
     ```
     What is the name of the bundle you want to create? [flights-gen-bundle]: flights-serverless-no-wheels
-    Do you want that the repo libraries generate wheels? [false]:
-    Do you want that the Databricks workflows run in serverless? [false]: true
+    Do you want to generate wheels for the project's Python modules (instead of using relative imports)? [false]:
+    Do you want the Databricks workflows to run on serverless? [false]: true
 
     Your bundle 'flights-serverless-no-wheels' has been created.
     ```
 
 5. Deploy a development copy of this project, type:
     ```
-    $ databricks bundle deploy --target dev
+    $ databricks bundle deploy --profile <your CLI profile> --target dev
     ```
     (Note that "dev" is the default target, so the `--target` parameter
     is optional here.)

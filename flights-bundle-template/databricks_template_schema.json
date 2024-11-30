@@ -9,13 +9,13 @@
       "generate_wheels": {
          "type": "boolean",
          "default": false,
-         "description": "Do you want that the repo libraries generate wheels?",
+         "description": "Do you want to generate wheels for the project's Python modules (instead of using relative imports)?",
          "order": 2
       },
       "serverless_jobs": {
          "type": "boolean",
          "default": false,
-         "description": "Do you want that the Databricks workflows run in serverless?",
+         "description": "Do you want the Databricks workflows to run on serverless?",
          "order": 2
       }
    },
