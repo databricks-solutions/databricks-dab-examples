@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=bundle-schema.json
+bundle:
+  name: awesome-dabs-cicd-project
+
+# Variables values can be set here, through CLI or env
+variables:
+  catalog: 
+    description: "Catalog in UC"
+  schema: 
+    description: "Schema in UC"
+  table: 
+    description: "Target table in UC"
+  num_workers: 
+    description: "Number of workers for the job cluster"
+    default: 1
+  spark_version:
+    description: "DBR version"
+
+# Importing the resources and other definitions on the resources folder
+include:
+  - resources/*.yml
+  
+
+# Targets a.k.a environments or workspaces
+targets:
+  dev:
+    default: true
+
+    workspace:
+      host: https://company-dev.cloud.databricks.com/
+
+    variables:
+      catalog: amer_sts_catalog
+      schema: dev
+      table: california_housing
+      spark_version: "14.3.x-scala2.12"
+
+  prod:
+    workspace:
+      host: https://company-prd.cloud.databricks.com/
+
+    mode: production
+
+    # all workloads would be created and executed as the SP configured in the CI/CD pipeline
+    run_as:
+      service_principal_name: ${workspace.current_user.userName}
+    
+    # Resource dynamic overwrite for prod: schedule attribute added
+    resources:
+      jobs:
+        awesome_job:
+          schedule: 
+            timezone_id: America/Los_Angeles
+            quartz_cron_expression: "0 0 3 * * ?"

@@ -1,0 +1,8 @@
+variables:
+  my_cluster:
+    description: "My job cluster"
+    type: complex
+    default:
+      spark_version: ${var.spark_version} 
+      node_type_id: "Standard_DS3_v2"
+      num_workers: ${var.num_workers}

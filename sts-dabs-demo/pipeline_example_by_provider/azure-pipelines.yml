@@ -1,0 +1,91 @@
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  PROD_DIRECTORY: "/Repos/GA/cicd_w_dabs_ga_demo"
+
+jobs:
+- job: unit_testing
+  displayName: 'Databricks Unit testing'
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+    - checkout: self
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.10'
+      displayName: "Install Python"
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      displayName: 'Install python dependencies'
+
+    - script: |
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
+      displayName: 'Install Databricks CLI'
+
+    - script: |
+        databricks repos update $(PROD_DIRECTORY) --branch $(Build.SourceBranchName)
+      displayName: 'Updating databricks repo'
+      env:
+        DATABRICKS_BUNDLE_ENV: prod
+        DATABRICKS_CLIENT_ID: $(DATABRICKS_CLIENT_ID)
+        DATABRICKS_CLIENT_SECRET: $(DATABRICKS_CLIENT_SECRET)
+
+    - script: |
+        nutter run "$(PROD_DIRECTORY)/tests/" --cluster_id $(DATABRICKS_CLUSTER_ID) --recursive --junit_report --timeout 900
+      displayName: 'Run unit tests'
+      env:
+        DATABRICKS_HOST: $(DATABRICKS_HOST)
+        DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/test-*.xml' 
+        failTaskOnFailedTests: true
+
+- job: deploy
+  displayName: 'Deploy bundle'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: unit_testing
+  steps:
+    - checkout: self
+
+    - script: |
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
+      displayName: 'Install Databricks CLI'
+
+    - script: |
+        databricks bundle deploy --target prod
+      displayName: 'Deploy bundle'
+      env:
+        DATABRICKS_BUNDLE_ENV: prod
+        DATABRICKS_CLIENT_ID: $(DATABRICKS_CLIENT_ID)
+        DATABRICKS_CLIENT_SECRET: $(DATABRICKS_CLIENT_SECRET)
+
+- job: run_pipeline
+  displayName: 'Run pipeline update'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: deploy
+  steps:
+    - checkout: self
+
+    - script: |
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
+      displayName: 'Install Databricks CLI'
+
+    - script: |
+        databricks bundle run cicd_w_dabs_ado_demo_job --target prod
+      displayName: 'Run pipeline update'
+      env:
+        DATABRICKS_BUNDLE_ENV: prod
+        DATABRICKS_CLIENT_ID: $(DATABRICKS_CLIENT_ID)
+        DATABRICKS_CLIENT_SECRET: $(DATABRICKS_CLIENT_SECRET)

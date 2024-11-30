@@ -1,0 +1,23 @@
+resources:
+  jobs:
+    awesome_job:
+      name: "[${bundle.target}] Awesome Spark Job"
+      
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster: ${var.my_cluster}
+
+      permissions: ${var.my_permissions}
+
+      tasks:
+        # Task Asd
+        - task_key: task_a
+          job_cluster_key: job_cluster
+          notebook_task:
+            notebook_path: ../src/python_notebook.ipynb 
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+              table: ${var.table}
+
+      

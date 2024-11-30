@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+    environment {
+        DATABRICKS_CLIPATH = "path_to_databricks_cli"
+        CLUSTER_ID = "databricks_cluster_id"
+        DATABRICKS_BUNDLE_ENV = "prod"
+        PROD_DIRECTORY = "/Repos/JK/cicd_w_dabs_ga_jk_demo"
+        DATABRICKS_HOST = credentials("HOST")
+        DATABRICKS_CLIENT_ID = credentials("CLIENT_ID")
+        DATABRICKS_CLIENT_SECRET = credentials("CLIENT_SECRET")
+        DATABRICKS_TOKEN = credentials("TOKEN")
+    }
+    stages {
+        stage('Update Repo') {
+            steps {
+                script {                   
+                   def BRANCH = "${GIT_BRANCH}".split('/')[1]
+                   sh """#!/bin/bash
+                   echo "Updating Databricks Repo..."
+                   ${DATABRICKS_CLIPATH}/databricks repos update ${PROD_DIRECTORY} --branch ${BRANCH}
+                """
+                }
+            }
+        }
+        stage('Install Python Dependencies') {
+            steps {
+                sh """#!/bin/bash
+                    echo "Installing Python dependencies..."
+                    python -m pip install --upgrade pip
+                    pip install -r requirements.txt
+                   """
+            }
+        }
+        stage('Unit Testing') {
+            steps {
+                script {         
+                   sh """#!/bin/bash
+                   echo "Updating Databricks Repo..."
+                   nutter run "${PROD_DIRECTORY}/tests/" --cluster_id ${CLUSTER_ID} --recursive --junit_report --timeout 900
+                """
+                }
+            }
+            // uncomment the following block to enable JUnit test reporting additional configuration needed
+            // post {
+            //     success {
+            //         junit checksName: 'Tests', testResults: '**/test-*.xml'
+            //         archiveArtifacts 'target/*.jar'
+            //     }
+            // }
+        }
+        stage('Deploy to Prod') {
+            steps {
+                sh """#!/bin/bash
+                ${DATABRICKS_CLIPATH}/databricks bundle deploy --target prod
+       """
+            }
+        }
+        stage('Run Job') {
+            steps {
+                sh """#!/bin/bash
+                ${DATABRICKS_CLIPATH}/databricks bundle run cicd_w_dabs_ga_jk_demo_job --target prod
+       """
+            }
+        }
+    }
+}

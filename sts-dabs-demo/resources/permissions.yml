@@ -1,0 +1,10 @@
+variables:
+  my_permissions:
+    description: "My permissions"
+    type: complex
+    default:
+      - group_name: users
+        level: CAN_VIEW
+
+      - group_name: users
+        level: CAN_MANAGE_RUN

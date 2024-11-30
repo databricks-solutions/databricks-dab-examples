@@ -1,0 +1,67 @@
+image: python:latest
+
+variables:
+  PROD_DIRECTORY: "/Repos/GL/cicd_w_dabs_gl_demo" 
+  DATABRICKS_BUNDLE_ENV: prod
+  DATABRICKS_HOST: $HOST
+  DATABRICKS_CLIENT_ID: $CLIENT_ID
+  DATABRICKS_CLIENT_SECRET: $CLIENT_SECRET
+
+.install_databricks_cli:
+  before_script:
+    - curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+.install_python_dependencies:
+  before_script:
+    - echo "Installing Python dependencies..."
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+stages:
+  - test
+  - deploy
+
+test:update_repo:
+  stage: test
+  extends: .install_databricks_cli
+  script:
+    - databricks repos update $PROD_DIRECTORY --branch $CI_COMMIT_BRANCH
+  rules:
+    - when: on_success
+
+test:unit_testing:
+  stage: test
+  extends: .install_python_dependencies
+  variables:
+    CLUSTER: $CLUSTER_ID
+    DATABRICKS_TOKEN: $TOKEN
+  needs:
+    - test:update_repo
+  script:
+    - nutter run "$PROD_DIRECTORY/tests/" --cluster_id $CLUSTER --recursive --junit_report --timeout 900
+  artifacts:
+    reports:
+      junit:
+        - "**/test-*.xml"
+  rules:
+    - when: on_success
+
+deploy:prod:
+  stage: deploy
+  extends: .install_databricks_cli
+  needs:
+    - test:unit_testing
+  script:
+    - databricks bundle deploy --target prod
+  rules:
+    - when: on_success
+
+deploy:run:
+  stage: deploy
+  extends: .install_databricks_cli
+  needs:
+    - deploy:prod
+  script:
+    - databricks bundle run cicd_w_dabs_gl_demo_job --target prod
+  rules:
+    - when: on_success

@@ -1,0 +1,40 @@
+image: python:latest
+
+definitions:
+  steps:
+    - step: &update_repo
+        name: Update Repository
+        script:
+          - curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          - databricks repos update $PROD_DIRECTORY --branch $BITBUCKET_BRANCH
+
+    - step: &unit_testing
+        name: Unit Testing
+        script:
+          - python -m pip install --upgrade pip
+          - pip install -r requirements.txt
+          - nutter run "$PROD_DIRECTORY/tests/" --cluster_id $CLUSTER_ID --recursive --junit_report --timeout 900
+        artifacts:
+          - "**/test-*.xml"
+
+    - step: &deploy_bundle
+        name: Deploy to Production
+        script:
+          - curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          - databricks bundle deploy --target prod
+
+    - step: &run_job
+        name: Run Job
+        script:
+          - curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          - databricks bundle run cicd_w_dabs_bb_demo_job --target prod
+
+pipelines:
+  branches:
+    main:
+      - step: *update_repo
+      - step: *unit_testing
+      - step: *deploy_bundle
+      - step: *run_job
+options:
+  max-time: 60
