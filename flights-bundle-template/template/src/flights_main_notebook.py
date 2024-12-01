@@ -4,6 +4,11 @@ dbutils.widgets.text("database", "flights_dev")
 
 # COMMAND ----------
 
+# MAGIC %pip install -r requirements.txt
+# MAGIC dbutils.library.restartPython()
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## Read csv data (batch mode)
 
