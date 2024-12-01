@@ -4,7 +4,7 @@ dbutils.widgets.text("database", "flights_dev")
 
 # COMMAND ----------
 
-# MAGIC %pip install -r requirements.txt
+# MAGIC %pip install -r ../requirements.txt
 # MAGIC dbutils.library.restartPython()
 
 # COMMAND ----------
