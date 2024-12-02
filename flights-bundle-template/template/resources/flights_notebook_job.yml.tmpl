@@ -6,43 +6,23 @@ resources:
 
       tasks:
         - task_key: notebook_task
-{{if not .serverless_jobs}}
-          job_cluster_key: job_cluster
-{{end}}
           notebook_task:
             notebook_path: ../src/flights_main_notebook.py
             base_parameters:
                 catalog: ${var.catalog}
                 database: ${var.database}
-{{if .serverless_jobs}}
-{{if .generate_wheels}}
-            environment_key: flights
-{{end}}
+                {{if .generate_wheels}}artifact_dir: ${var.artifact_dir}{{end}}
           max_retries: 0
-
-{{if .generate_wheels}}
-      environments:
-        - environment_key: flights
-          spec:
-            client: "1"
-            dependencies:
-              - ../dist/*.whl
-{{end}}
-{{else}}
+{{if not .serverless_jobs}}
+          job_cluster_key: job_cluster
           libraries:
             - pypi: 
                 package: pytest
-{{if .generate_wheels}}
-            - whl: ../dist/*.whl
-{{end}}
-          max_retries: 0
-{{end}}
 
-{{if not .serverless_jobs}}
       job_clusters:
         - job_cluster_key: job_cluster
           new_cluster:
-            spark_version: 15.4.x-scala2.12
+            spark_version: ${var.spark_version}
             node_type_id: ${var.node_type_id}
             data_security_mode: USER_ISOLATION
             autoscale:

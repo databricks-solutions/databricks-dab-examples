@@ -1,12 +1,15 @@
 # This is the configuration for the Databricks Asset Bundle {{.project_name}}.
 
 bundle:
-  name: {{.project_name}}.
+  name: {{.project_name}}
 
 {{if .generate_wheels}}
 artifacts:
   default:
     type: whl
+
+workspace:
+  artifact_path: ${var.artifact_dir}
 {{end}}
 
 include:
@@ -23,9 +26,11 @@ variables:
   flights_dlt_schema:
     default: "flights_dev"
   spark_version:
-    default: "15.3.x-scala2.12"
+    default: "15.4.x-scala2.12"
   node_type_id:
     default: "m6gd.xlarge"
+  artifact_dir:
+    default: "/Workspace/Users/${workspace.current_user.userName}/shared_code/${bundle.target}"
   shared_cluster_config:
     type: "complex"
     default:
