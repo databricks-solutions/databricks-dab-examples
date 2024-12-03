@@ -62,6 +62,6 @@ deploy:run:
   needs:
     - deploy:prod
   script:
-    - databricks bundle run cicd_w_dabs_gl_demo_job --target prod
+    - databricks bundle run awesome_job --target prod
   rules:
     - when: on_success

@@ -41,7 +41,7 @@ if [ $? -ne 0 ]; then handle_error "Deploying to Prod"; fi
 
 # Run Job
 echo "Running Job..."
-${DATABRICKS_CLIPATH}/databricks bundle run cicd_w_dabs_ga_jk_demo_job --target prod
+${DATABRICKS_CLIPATH}/databricks bundle run awesome_job --target prod
 if [ $? -ne 0 ]; then handle_error "Running Job"; fi
 
 echo "Script completed successfully."

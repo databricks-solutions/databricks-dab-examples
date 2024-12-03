@@ -83,7 +83,7 @@ jobs:
       displayName: 'Install Databricks CLI'
 
     - script: |
-        databricks bundle run cicd_w_dabs_ado_demo_job --target prod
+        databricks bundle run awesome_job --target prod
       displayName: 'Run pipeline update'
       env:
         DATABRICKS_BUNDLE_ENV: prod

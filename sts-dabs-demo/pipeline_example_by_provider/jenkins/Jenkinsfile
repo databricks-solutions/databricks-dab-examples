@@ -58,7 +58,7 @@ pipeline {
         stage('Run Job') {
             steps {
                 sh """#!/bin/bash
-                ${DATABRICKS_CLIPATH}/databricks bundle run cicd_w_dabs_ga_jk_demo_job --target prod
+                ${DATABRICKS_CLIPATH}/databricks bundle run awesome_job --target prod
        """
             }
         }

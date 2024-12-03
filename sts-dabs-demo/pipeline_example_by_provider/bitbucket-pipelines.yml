@@ -27,7 +27,7 @@ definitions:
         name: Run Job
         script:
           - curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
-          - databricks bundle run cicd_w_dabs_bb_demo_job --target prod
+          - databricks bundle run awesome_job --target prod
 
 pipelines:
   branches:

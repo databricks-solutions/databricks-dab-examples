@@ -84,6 +84,6 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Run pipeline update
-        run: databricks bundle run cicd_w_dabs_ga_demo_job --target prod
+        run: databricks bundle run awesome_job --target prod
         env:
           DATABRICKS_BUNDLE_ENV: prod
