@@ -12,7 +12,7 @@ resources:
       {{if not .serverless_jobs}}
       {{if .generate_wheels}}
           libraries:
-            - whl: ${var.artifact_dir}/.internal/*.whl
+            - whl: ${var.artifact_dir}/.internal/flights-0.0.1-py3-none-any.whl
       {{end}}
           job_cluster_key: job_cluster
 
