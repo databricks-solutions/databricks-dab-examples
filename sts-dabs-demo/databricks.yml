@@ -15,6 +15,8 @@ variables:
     default: 1
   spark_version:
     description: "DBR version"
+  node_type:
+    description: "Node type to use in cluster"
 
 # Importing the resources and other definitions on the resources folder
 include:
@@ -34,12 +36,20 @@ targets:
       schema: dev
       table: california_housing
       spark_version: "14.3.x-scala2.12"
+      node_type: "Standard_DS3_v2"
 
   prod:
     workspace:
       host: https://company-prd.cloud.databricks.com/
 
     mode: production
+
+    variables:
+      catalog: amer_sts_catalog
+      schema: prod
+      table: california_housing
+      spark_version: "14.3.x-scala2.12"
+      node_type: "Standard_DS3_v2"
 
     # all workloads would be created and executed as the SP configured in the CI/CD pipeline
     run_as:

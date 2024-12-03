@@ -4,5 +4,5 @@ variables:
     type: complex
     default:
       spark_version: ${var.spark_version} 
-      node_type_id: "Standard_DS3_v2"
+      node_type_id: ${var.node_type}
       num_workers: ${var.num_workers}
