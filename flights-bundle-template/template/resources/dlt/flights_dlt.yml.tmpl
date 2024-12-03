@@ -14,7 +14,7 @@ resources:
             path: ../../src/flights_main_dlt.py
       target: ${var.flights_dlt_schema}
       development: false
-      catalog: main
+      catalog: ${var.catalog}
       {{if .serverless_jobs}}
       serverless: true
       {{else}}

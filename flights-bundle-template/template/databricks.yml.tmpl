@@ -22,13 +22,11 @@ include:
 
 variables:
   catalog:
-    default: "main"
+    default: {{.catalog}}
   database:
-    default: "flights_dev"
-  flights_test_schema:
-    default: "flights_validation_dev"
+    default: {{.database}}
   flights_dlt_schema:
-    default: "flights_dev"
+    default: {{.database}}
   spark_version:
     default: "15.4.x-scala2.12"
   node_type_id:
