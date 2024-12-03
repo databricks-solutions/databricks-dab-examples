@@ -1,0 +1,39 @@
+# The main job for flights_project
+resources:
+  jobs:
+    flights_python_script:
+      name: {{.project_name}}_python_script_job_${bundle.target}
+
+      tasks:
+        - task_key: python_script
+          spark_python_task:
+            python_file: ../src/flights_main_script.py
+            parameters: ["--catalog", "${var.catalog}", "--database", "${var.database}"]
+      {{if not .serverless_jobs}}
+      {{if .generate_wheels}}
+          libraries:
+            - whl: ${var.artifact_dir}/.internal/flights-0.0.1-py3-none-any.whl
+      {{end}}
+          job_cluster_key: job_cluster
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: ${var.spark_version}
+            node_type_id: ${var.node_type_id}
+            data_security_mode: USER_ISOLATION
+            autoscale:
+                min_workers: 1
+                max_workers: 2
+      {{else}}
+          environment_key: flights
+
+      environments:
+        - environment_key: flights
+          spec:
+            client: "1"
+      {{if .generate_wheels}}
+            dependencies:
+              - ${var.artifact_dir}/.internal/flights-0.0.1-py3-none-any.whl
+      {{end}}
+      {{end}}

@@ -1,3 +1,4 @@
 /flights-simple @dustinvannoy-db
+/flights-bundle-template @lorenzorubi-db
 /dais-2024-dab-mod-orch-template @daboncanplay
 /sts-dabs-demo @ivancalvo-dbxs

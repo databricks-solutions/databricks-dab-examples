@@ -1,0 +1,112 @@
+# This is the configuration for the Databricks Asset Bundle {{.project_name}}.
+
+bundle:
+  name: {{.project_name}}
+
+{{if .generate_wheels}}
+artifacts:
+  default:
+    type: whl
+
+workspace:
+  artifact_path: ${var.artifact_dir}
+
+sync:
+  exclude:
+    - src/flights
+{{end}}
+
+include:
+  - resources/*.yml
+  - resources/dlt/*.yml
+
+variables:
+  catalog:
+    default: {{.catalog}}
+  database:
+    default: {{.database}}
+  flights_dlt_schema:
+    default: {{.database}}
+  spark_version:
+    default: "15.4.x-scala2.12"
+  node_type_id:
+    default: "m6gd.xlarge"
+  artifact_dir:
+    default: "/Workspace/Users/${workspace.current_user.userName}/shared_code/${bundle.target}"
+  shared_cluster_config:
+    type: "complex"
+    default:
+      spark_version: ${var.spark_version}
+      node_type_id: ${var.node_type_id}
+      data_security_mode: USER_ISOLATION
+      autoscale:
+          min_workers: 1
+          max_workers: 2
+
+targets:
+  # The 'dev' target, used for development purposes.
+  # Whenever a developer deploys using 'dev', they get their own copy.
+  dev:
+    # We use 'mode: development' to make sure everything deployed to this target gets a prefix
+    # like '[dev my_user_name]'. Setting this mode also disables any schedules and
+    # automatic triggers for jobs and enables the 'development' mode for Delta Live Tables pipelines.
+    mode: development
+    default: true
+    workspace:
+      host: {{workspace_host}}
+
+  test:
+    # For test/staging deployments, we only have a single copy, so we should deploy as 
+    # the same user (Service Principal) ever time.
+    mode: production
+    workspace:
+      host: {{workspace_host}}
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_test
+      flights_test_schema: flights_validation_test
+      flights_dlt_schema: flights_test
+
+  test_automated:
+    # For test/staging deployments, we only have a single copy, so we should deploy as 
+    # the same user (Service Principal) ever time.
+    mode: production
+    workspace:
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_test
+      flights_test_schema: flights_validation_test
+      flights_dlt_schema: flights_test
+      node_type_id: Standard_DS3_v2
+
+  staging:
+    mode: production
+    workspace:
+      host: {{workspace_host}}
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_staging
+      flights_test_schema: flights_validation_staging
+      flights_dlt_schema: flights_staging
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: {{workspace_host}}
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      # This can run as a specific user or service principal in production.
+      # To run as service principal use service_principal_name (see Databricks documentation).
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_prod
+      flights_test_schema: flights_validation_prod
+      flights_dlt_schema: flights_prod
+

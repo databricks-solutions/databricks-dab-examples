@@ -1,0 +1,32 @@
+resources:
+  pipelines:
+    flights_dlt:
+      name: {{.project_name}}_dlt_${bundle.target}
+      configuration:
+        var.source_path: /databricks-datasets/airlines
+        {{if .generate_wheels}}
+        artifact_path: ${var.artifact_dir}
+        {{ else }}
+        artifact_path: ${workspace.file_path}/src
+        {{end}}
+      libraries:
+        - notebook:
+            path: ../../src/flights_main_dlt.py
+      target: ${var.flights_dlt_schema}
+      development: false
+      catalog: ${var.catalog}
+      {{if .serverless_jobs}}
+      serverless: true
+      {{else}}
+      serverless: false
+      {{end}}
+
+  jobs:
+    flights_dlt_job:
+      name: {{.project_name}}_dlt_job_${bundle.target}
+
+      tasks:
+        - task_key: run_flights_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.flights_dlt.id}
+          max_retries: 0
