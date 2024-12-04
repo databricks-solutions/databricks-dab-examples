@@ -5,4 +5,5 @@ variables:
     default:
       spark_version: ${var.spark_version} 
       node_type_id: ${var.node_type}
+      data_security_mode: USER_ISOLATION
       num_workers: ${var.num_workers}
