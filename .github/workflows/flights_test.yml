@@ -15,13 +15,6 @@ on:
       - "**/*.yml"
       - "**/*.py"
 
-  #push:
-  #  branches:
-  #    - fix/yyyymmdd
-  #  paths:
-  #    - "**/*.yml"
-  #    - "**/*.py"
-
 jobs:
   deploy:
     name: "Test and deploy bundle"
@@ -30,7 +23,7 @@ jobs:
     defaults:
       run:
         working-directory: .
-  
+
     steps:
       - uses: actions/checkout@v3
 
@@ -51,7 +44,7 @@ jobs:
           DATABRICKS_CLUSTER_ID: ${{ secrets.DATABRICKS_CLUSTER_ID }}
         run: |
           pytest tests/ 
-      
+
       - uses: databricks/setup-cli@main
 
       - run: databricks bundle deploy --target test_automated
@@ -85,13 +78,3 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
           DATABRICKS_BUNDLE_ENV: tst
-
-      # - shell: bash
-      #   name: Run pipeline validation
-      #   run: |
-      #     set -o pipefail
-      #     databricks bundle run flights_simple_dlt_validation -t test_automated
-      #   env:
-      #     DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      #     DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
-      #     DATABRICKS_BUNDLE_ENV: tst
