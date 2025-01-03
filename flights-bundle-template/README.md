@@ -1,12 +1,15 @@
 # flights-bundle-template
 
-Template on top of the 'flights_simple' project to enable the following deployment options:
+Template on top of the [flights_simple](../flights-simple) project to enable the following deployment options:
 1. Wheels or relative imports for the project's Python modules
 2. Serverless compute or classic compute for workflows
 
-## resources
-Only a template for one type of job is demonstrated right now in the `resources` directory.
-- `flights_notebook_job.yml` shows a notebook job
+## Resources
+A subset of [flights_simple](../flights-simple) resources are currently demonstrated at the [template resources dir](template/resources/).
+- `flights_notebook_job.yml` shows a template for a notebook job with a few parameters, a basic PyPi dependency plus the custom wheel (if selected).
+- `flights_python_script_job_classic.yml` shows a template for a Python script with parameters.
+- `dlt/flights_dlt.yml` shows a template for a DLT pipeline and a job to schedule that pipeline.
+
 
 ## Getting started
 
