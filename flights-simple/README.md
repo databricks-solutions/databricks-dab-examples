@@ -16,6 +16,8 @@ Various types of jobs are demonstrated in the `resources` directory.
 - `pytest_notebook_job_classic.yml` shows running the pytest notebook as a task in a workflow.
 - `dlt/flights_dlt.yml` shows example DLT pipeline and job to schedule that pipeline.
 - `dlt/flights_dlt_validation.yml` shows running DLT pipeline plus added notebook with DLT unit tests.
+- `dlt/flights_dlt_sql.yml` shows the same example of DLT pipeline translated to SQL and job to schedule that pipeline.
+- `dlt/flights_dlt_sql_validation.yml` shows running DLT pipeline in SQL plus added notebook with DLT unit tests in Python.
 
 ## Getting started
 

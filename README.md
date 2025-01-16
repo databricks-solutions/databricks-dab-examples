@@ -40,7 +40,7 @@ The installation of the Databricks CLI is a pre-requisite for running any of the
     ```
 
 3. Optionally, install developer tools such as the Databricks extension for Visual Studio Code from
-   https://docs.databricks.com/dev-tools/vscode-ext.html. For PyCharm proffesional, you may use 
+   https://docs.databricks.com/dev-tools/vscode-ext.html. For PyCharm professional, you may use 
    https://www.jetbrains.com/help/pycharm/databricks.html#connect-via-databricks-cli. Or read the "getting started" 
    [documentation](https://docs.databricks.com/en/dev-tools/databricks-connect/python/index.html) for
    **Databricks Connect** for instructions on running the included Python code from a different IDE.
