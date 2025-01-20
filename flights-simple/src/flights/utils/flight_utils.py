@@ -42,7 +42,7 @@ def read_batch(spark, path):
     schema = get_flight_schema()
   
     batch_df = (spark.read.format("csv")
-      .option("header", "true")
+      .option("header", "false")
       .schema(schema)
       .load(path)
     )
