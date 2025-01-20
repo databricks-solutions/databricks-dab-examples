@@ -18,7 +18,7 @@ import pyspark.sql.functions as F
     temporary=True,
     comment="Test: check clean table removes null ids and has correct count"
 )
-@dlt.expect_all({
+@dlt.expect_all_or_fail({
     "keep_all_rows": "num_rows == 1000",
     "null_ids_removed": "null_ids == 0"
 })
@@ -43,7 +43,8 @@ def test_flights_dlt_summary_count_check():
 
 @dlt.table(comment="Check delay_type")
 @dlt.expect_all_or_fail({
-                     "valid type": "delay_type is null or delay_type in ('UncategorizedDelay', 'WeatherDelay', 'NASDelay', 'SecurityDelay', 'LateAircraftDelay')",
-                         "last_updated is not null": "last_updated_time is not null"})
+        "valid type": "delay_type is null or delay_type in ('UncategorizedDelay', 'WeatherDelay', 'NASDelay', 'SecurityDelay', 'LateAircraftDelay')",
+        "last_updated_time is not null": "last_updated_time is not null"
+})
 def test_flights_dlt_raw_type_check():
   return dlt.read("flights_dlt_raw").select("delay_type", "last_updated_time")
