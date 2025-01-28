@@ -1,18 +1,19 @@
 -- Databricks notebook source
 -- DBTITLE 1,Read raw
 
- CREATE OR REFRESH TEMPORARY STREAMING TABLE flights_dlt_raw_view
+ CREATE OR REFRESH TEMPORARY STREAMING TABLE flights_dlt_raw_view (
+   CONSTRAINT remove_header EXPECT (ArrTime != 'ArrTime') ON VIOLATION DROP ROW
+ )
  TBLPROPERTIES (
    "quality" = "bronze"
  ) AS SELECT * FROM cloud_files(
     '${var.source_path}',
     'csv',
    map(
-    "header", "true",
-    "inferSchema", "true",
+    "header", "false",
     "schema", "Year INT, Month INT, DayofMonth INT, DayOfWeek INT, DepTime STRING, CRSDepTime INT, ArrTime STRING, CRSArrTime INT, UniqueCarrier STRING, FlightNum INT, TailNum STRING, ActualElapsedTime STRING, CRSElapsedTime INT, AirTime STRING, ArrDelay STRING, DepDelay STRING, Origin STRING, Dest STRING, Distance STRING, TaxiIn STRING, TaxiOut STRING, Cancelled INT, CancellationCode STRING, Diverted INT, CarrierDelay STRING, WeatherDelay STRING, NASDelay STRING, SecurityDelay STRING, LateAircraftDelay STRING, IsArrDelayed STRING, IsDepDelayed STRING"
    )
- ) LIMIT 1000;
+ ) LIMIT 1001;
 
 -- COMMAND ----------
 

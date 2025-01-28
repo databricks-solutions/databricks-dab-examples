@@ -50,7 +50,7 @@ def read_batch(spark, path):
     return batch_df
 
 
-def read_autoloader(spark, path, checkpoint_location):
+def read_autoloader(spark, path):
   schema = get_flight_schema()
   
   streaming_df = spark.readStream.format("cloudFiles") \
