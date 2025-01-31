@@ -1,0 +1,15 @@
+# App consuming resources from dabs-cookbook-app.
+resources:
+  apps:
+    dabs-cookbook-app:
+      name: dabs-cookbook-app
+      source_code_path: ../src/app
+      description: "A Streamlit app with some Cookbook recipes."
+      config:
+        command:
+          - "streamlit"
+          - "run"
+          - "app.py"
+        env:
+          - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+            value: "false"

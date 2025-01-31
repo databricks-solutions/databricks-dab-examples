@@ -1,0 +1,30 @@
+# This is the configuration for the Databricks Asset Bundle dabs-cookbook-app.
+
+bundle:
+  name: dabs-cookbook-app
+
+include:
+  - resources/*.yml
+
+targets:
+  # The 'dev' target, used for development purposes.
+  # Whenever a developer deploys using 'dev', they get their own copy.
+  dev:
+    # We use 'mode: development' to make sure everything deployed to this target gets a prefix
+    # like '[dev my_user_name]'. Setting this mode also disables any schedules and
+    # automatic triggers for jobs and enables the 'development' mode for Delta Live Tables pipelines.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-522548490841242.2.azuredatabricks.net
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-522548490841242.2.azuredatabricks.net
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - service_principal_name: 94e5a133-3b94-40bd-bb02-e21572a7d123
+        level: CAN_MANAGE
+
