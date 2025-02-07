@@ -1,6 +1,4 @@
-# yaml-language-server: $schema=bundle_config_schema.json
-
-# This is a Databricks asset bundle definition for datakickstart_dabs.
+# This is a Databricks asset bundle definition for databricks-dab-examples.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
   name: flights_simple
@@ -13,11 +11,11 @@ variables:
   catalog:
     default: "main"
   database:
-    default: "flights_dev"
+    default: ${resources.schemas.project_schema.name}
+  flights_dlt_schema:
+    default: ${resources.schemas.project_schema.name}
   flights_test_schema:
     default: "flights_validation_dev"
-  flights_dlt_schema:
-    default: "flights_dev"
   spark_version:
     default: "15.3.x-scala2.12"
   node_type_id:
@@ -44,6 +42,15 @@ targets:
     workspace:
       host: https://company-dev.cloud.databricks.com/
 
+    # resource override
+    ## Only create this schema in dev, for other targets manage with Terraform.
+    resources:
+      schemas:
+        project_schema:
+          name: flights
+          catalog_name: ${var.catalog}
+          comment: "Schema for flight data"
+
   test:
     # For test/staging deployments, we only have a single copy, so we should deploy as 
     # the same user (Service Principal) ever time.
@@ -54,9 +61,9 @@ targets:
     run_as:
       user_name: ${workspace.current_user.userName}
     variables:
-      database: flights_test
-      flights_test_schema: flights_validation_test
-      flights_dlt_schema: flights_test
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
 
   test_automated:
     # For test/staging deployments, we only have a single copy, so we should deploy as 
@@ -67,9 +74,9 @@ targets:
     run_as:
       user_name: ${workspace.current_user.userName}
     variables:
-      database: flights_test
-      flights_test_schema: flights_validation_test
-      flights_dlt_schema: flights_test
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
       node_type_id: Standard_DS3_v2
 
   staging:
@@ -80,9 +87,9 @@ targets:
     run_as:
       user_name: ${workspace.current_user.userName}
     variables:
-      database: flights_staging
-      flights_test_schema: flights_validation_staging
-      flights_dlt_schema: flights_staging
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
 
   # The 'prod' target, used for production deployment.
   prod:
@@ -95,6 +102,6 @@ targets:
       # To run as service principal use service_principal_name (see Databricks documentation).
       user_name: ${workspace.current_user.userName}
     variables:
-      database: flights_prod
-      flights_test_schema: flights_validation_prod
-      flights_dlt_schema: flights_prod
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}

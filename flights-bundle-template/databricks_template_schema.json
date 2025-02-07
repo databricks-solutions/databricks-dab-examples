@@ -26,7 +26,7 @@
       },
       "database": {
          "type": "string",
-         "default": "flights_dev",
+         "default": "flights",
          "description": "Name of your UC database for your workflows/DLT?",
          "order": 2
       }
