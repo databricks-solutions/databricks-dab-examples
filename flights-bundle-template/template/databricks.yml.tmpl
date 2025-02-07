@@ -26,7 +26,7 @@ variables:
   database:
     default: ${resources.schemas.project_schema.name}
   flights_dlt_schema:
-    default: ${resources.schemas.project_schema.name}
+    default: ${resources.schemas.project_schema.name}_dlt
   flights_test_schema:
     default: "${resources.schemas.project_schema.name}_validation"
   spark_version:
@@ -77,7 +77,7 @@ targets:
       user_name: ${workspace.current_user.userName}
     variables:
       database: flights_${bundle.target}
-      flights_dlt_schema: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
       flights_test_schema: flights_validation_test
 
   test_automated:
@@ -90,7 +90,7 @@ targets:
       user_name: ${workspace.current_user.userName}
     variables:
       database: flights_${bundle.target}
-      flights_dlt_schema: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
       flights_test_schema: flights_validation_test
       node_type_id: Standard_DS3_v2
 
@@ -103,7 +103,7 @@ targets:
       user_name: ${workspace.current_user.userName}
     variables:
       database: flights_${bundle.target}
-      flights_dlt_schema: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
       flights_test_schema: flights_validation_staging
 
   # The 'prod' target, used for production deployment.
@@ -118,5 +118,5 @@ targets:
       user_name: ${workspace.current_user.userName}
     variables:
       database: flights_${bundle.target}
-      flights_dlt_schema: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
       flights_test_schema: flights_validation_prod
