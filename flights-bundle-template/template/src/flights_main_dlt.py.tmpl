@@ -1,13 +1,12 @@
 # Databricks notebook source
+import dlt
+import sys, os
 artifact_path = spark.conf.get("artifact_path")
 {{if .generate_wheels}}
 # MAGIC %pip install $artifact_path/.internal/flights-0.0.1-py3-none-any.whl
 {{else}}
 sys.path.append(os.path.abspath(artifact_path))
 {{end}}
-# COMMAND ----------
-import dlt
-import sys, os
 
 # COMMAND ----------
 
