@@ -15,7 +15,7 @@ variables:
   flights_dlt_schema:
     default: ${resources.schemas.project_schema.name}
   flights_test_schema:
-    default: "flights_validation_dev"
+    default: "${resources.schemas.project_schema.name}_validation"
   spark_version:
     default: "15.3.x-scala2.12"
   node_type_id:
