@@ -1,0 +1,36 @@
+bundle:
+  name: uv_bundle
+
+artifacts:
+  default:
+    type: whl
+    build: uv build
+    path: .
+
+resources:
+  jobs:
+    uv_bundle_job:
+      name: uv_bundle_job
+      tasks:
+        - task_key: main_task
+          job_cluster_key: job_cluster
+          python_wheel_task:
+            package_name: uv_bundle
+            entry_point: runtime
+          libraries:
+            - whl: ./dist/*.whl
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 16.1.x-scala2.12
+            node_type_id: Standard_D3_v2
+            autoscale:
+                min_workers: 1
+                max_workers: 4
+
+targets:
+  dev:
+    mode: development
+    default: true
+

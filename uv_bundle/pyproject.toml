@@ -1,0 +1,17 @@
+[project]
+name = "uv_bundle"
+description = "Bundle test with uv"
+readme = "README.md"
+requires-python = "==3.12"
+dependencies = []
+version = "0.0.1"
+
+[project.scripts]
+runtime = "uv_bundle.main:main"
+
+[dependency-groups]
+dev = [
+    "databricks-connect==16.1",
+    "pip>=25.0", #Must be installed otherwise VScode extension will not work
+    "pytest>=8.3.4",
+]
