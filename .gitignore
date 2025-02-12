@@ -7,4 +7,4 @@ __pycache__
 .venv
 .databricks
 build/
-disto/
+dist/
