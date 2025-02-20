@@ -13,6 +13,7 @@ The repository is organized into multiple folders, each representing a distinct 
   - library packaged as wheel or using relative imports
 - [`dais-2024-dab-mod-orch-template`](dais-2024-dab-mod-orch-template): Simple template for DAB
 - [`sts-dabs-demo`](sts-dabs-demo) DABs simple project that includes many CICD pipeline definitions
+- [`uv_bundle`](uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
 
 ## Getting Started
 The structure of each of the folders varies according to the purpose of the project, but will include:

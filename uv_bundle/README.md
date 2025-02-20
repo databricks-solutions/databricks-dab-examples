@@ -1,4 +1,4 @@
-# autoloader_bundle
+# uv_bundle
 
 This project aims to demonstrate how ```uv``` works for creating and running databricks projects, backed by ```databricks-connect```
 
