@@ -28,4 +28,4 @@ def test_get_flight_schema__valid():
     """
     schema = flight_utils.get_flight_schema()
     assert schema is not None
-    assert len(schema) == 31    assert len(schema) == 31
+    assert len(schema) == 31
