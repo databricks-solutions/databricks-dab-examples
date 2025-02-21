@@ -1,0 +1,50 @@
+resources:
+  jobs:
+    notebook_validation_job:
+      name: {{.project_name}}_validation_job_${bundle.target}
+
+      tasks:
+        - task_key: setup_task
+          notebook_task:
+            notebook_path: ../tests/integration/setup_notebook.py
+            base_parameters:
+                catalog: ${var.catalog}
+                database: ${var.flights_test_schema}
+          max_retries: 0
+          {{if not .serverless_jobs}}job_cluster_key: job_cluster{{end}}
+
+        
+        - task_key: notebook_task
+          depends_on:
+            - task_key: setup_task
+          notebook_task:
+            notebook_path: ../src/flights_main_notebook.py
+            base_parameters:
+                catalog: ${var.catalog}
+                database: ${var.flights_test_schema}
+                {{if .generate_wheels}}artifact_dir: ${var.artifact_dir}{{end}}
+          max_retries: 0
+          {{if not .serverless_jobs}}job_cluster_key: job_cluster{{end}}
+          
+        - task_key: validation_task
+          depends_on:
+            - task_key: notebook_task
+          notebook_task:
+            notebook_path: ../tests/integration/validation_notebook.py
+            base_parameters:
+                catalog: ${var.catalog}
+                database: ${var.flights_test_schema}
+          max_retries: 0
+          {{if not .serverless_jobs}}job_cluster_key: job_cluster{{end}}
+
+      {{if not .serverless_jobs}}
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: ${var.node_type_id}
+            data_security_mode: USER_ISOLATION
+            autoscale:
+                min_workers: 1
+                max_workers: 2
+      {{end}}
