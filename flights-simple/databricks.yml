@@ -95,7 +95,7 @@ targets:
   prod:
     mode: production
     workspace:
-      host: https://company-prd.cloud.databricks.com/
+      host: https://e2-demo-west.cloud.databricks.com
       root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
     run_as:
       # This can run as a specific user or service principal in production.
