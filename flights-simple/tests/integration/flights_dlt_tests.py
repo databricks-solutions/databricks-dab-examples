@@ -47,4 +47,5 @@ def test_flights_dlt_summary_count_check():
         "last_updated_time is not null": "last_updated_time is not null"
 })
 def test_flights_dlt_raw_type_check():
+  print("hello")
   return dlt.read("flights_dlt_raw").select("delay_type", "last_updated_time")
