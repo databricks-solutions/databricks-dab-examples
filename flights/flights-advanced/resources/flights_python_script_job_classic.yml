@@ -1,0 +1,30 @@
+# The main job for flights_project
+resources:
+  jobs:
+    flights_python_script_classic:
+      name: flights_python_script_job_classic_${bundle.target}
+
+      tasks:
+        - task_key: python_script
+          job_cluster_key: job_cluster
+          spark_python_task:
+            python_file: ../_adhoc/explore_data.py
+            parameters: ["--catalog", "${var.catalog}", "--database", "${var.database}"]
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: ${var.node_type_id}
+            data_security_mode: USER_ISOLATION
+            autoscale:
+                min_workers: 1
+                max_workers: 2
+
+      # schedule:
+      #   quartz_cron_expression: '0 30 19 * * ?'
+      #   timezone_id: America/Los_Angeles
+
+      # email_notifications:
+      #   on_failure:
+      #     - fake@example.com
