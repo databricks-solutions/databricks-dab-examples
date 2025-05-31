@@ -16,6 +16,12 @@ sync:
     - github/
     - _cicd/
 
+# artifacts:
+#   my_flights:
+#     type: whl
+#     path: "."
+#     build: python setup.py bdist_wheel
+#     dynamic_version: true
 
 variables:
   catalog:
