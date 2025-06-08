@@ -83,7 +83,7 @@ targets:
     resources:
       schemas:
         project_schema:
-          name: flights
+          name: flights_advanced
           catalog_name: ${var.catalog}
           comment: "Schema for flight data"
 
