@@ -12,9 +12,7 @@ on:
 jobs:
   validate:
     name: "Test code and bundle"
-    runs-on:
-      group: databricks-field-eng-protected-runner-group
-      labels: ubuntu-latest
+    runs-on: ubuntu-latest
     environment: prod
     defaults:
       run:
@@ -33,9 +31,7 @@ jobs:
 
   deploy:
     name: "Run deploy"
-    runs-on:
-      group: databricks-field-eng-protected-runner-group
-      labels: ubuntu-latest
+    runs-on: ubuntu-latest
     environment: prod
     defaults:
       run:

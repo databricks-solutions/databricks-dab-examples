@@ -16,9 +16,7 @@ on:
 jobs:
   validate:
     name: "Test code and bundle"
-    runs-on: 
-      group: databricks-field-eng-protected-runner-group
-      labels: ubuntu-latest
+    runs-on: ubuntu-latest
     environment: 'test'
     defaults:
       run:
@@ -57,9 +55,7 @@ jobs:
   deploy:
     if: github.event.pull_request.merged == true || github.event.pull_request.base.ref == 'main'
     name: "Run deploy"
-    runs-on:
-      group: databricks-field-eng-protected-runner-group
-      labels: ubuntu-latest
+    runs-on: ubuntu-latest
     environment: 'test'
     defaults:
       run:
