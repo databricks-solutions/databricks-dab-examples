@@ -1,8 +1,8 @@
 # The main job for flights_project
 resources:
   jobs:
-    flights_python_script_classic:
-      name: flights_python_script_job_classic_${bundle.target}
+    flights_advanced_python_classic:
+      name: flights_advanced_python_job_classic_${bundle.target}
 
       tasks:
         - task_key: python_script

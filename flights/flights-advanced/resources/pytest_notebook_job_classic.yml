@@ -1,8 +1,8 @@
 # The main job for flights_project
 resources:
   jobs:
-    pytest_notebook_job:
-      name: pytest_notebook_job_${bundle.target}
+    pytest_advanced_notebook_job:
+      name: pytest_notebook_advanced_job_${bundle.target}
 
       tasks:
         - task_key: notebook_task

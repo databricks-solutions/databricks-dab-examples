@@ -1,20 +1,20 @@
 # The main job for flights_project
 resources:
   jobs:
-    flights_notebook:
-      name: flights_advanced_notebook_job_${bundle.target}
+    flights_system_test:
+      name: flights_system_test_${bundle.target}
       max_concurrent_runs: 1
       
       parameters:
         - name: catalog
           default: main
         - name: database
-          default: flights_dev
+          default: ${var.flights_test_schema}
 
       tasks:
         - task_key: notebook_task
           notebook_task:
-            notebook_path: ../src/flights_main_notebook.py
+            notebook_path: ../tests/flights_system_test.ipynb
             base_parameters:
                 artifact_path: ${workspace.artifact_path}
           max_retries: 0

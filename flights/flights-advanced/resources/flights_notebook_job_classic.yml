@@ -2,7 +2,7 @@
 resources:
   jobs:
     flights_notebook_classic:
-      name: flights_notebook_job_classic_${bundle.target}
+      name: flights_advanced_notebook_job_classic_${bundle.target}
 
       tasks:
         - task_key: notebook_task

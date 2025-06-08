@@ -1,7 +1,7 @@
 resources:
   pipelines:
-    flights_simple_dlt_sql_validation:
-      name: flights_simple_dlt_sql_validation_${bundle.target}
+    flights_advanced_dlt_sql_validation:
+      name: flights_advanced_dlt_sql_validation_${bundle.target}
       configuration:
         var.source_path: /databricks-datasets/airlines/part-00000*
         artifact_path: ${workspace.file_path}/src

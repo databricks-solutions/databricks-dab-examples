@@ -9,12 +9,12 @@ include:
 
 
 sync:
-  paths:
-    - ./
-    - ../shared_library
   exclude:
     - github/
     - _cicd/
+  # paths:
+  #   - ./
+  #   - ../shared_library
 
 # artifacts:
 #   my_flights:

@@ -1,7 +1,7 @@
 resources:
   pipelines:
-    flights_simple_dlt_sql:
-      name: flights_simple_dlt_sql_${bundle.target}
+    flights_advanced_dlt_sql:
+      name: flights_advanced_dlt_sql_${bundle.target}
       configuration:
         var.source_path: /databricks-datasets/airlines/part-00000*
         artifact_path: ${workspace.file_path}/src
@@ -21,7 +21,7 @@ resources:
       tasks:
         - task_key: run_flights_pipeline
           pipeline_task:
-            pipeline_id: ${resources.pipelines.flights_simple_dlt_sql.id}
+            pipeline_id: ${resources.pipelines.flights_advanced_dlt_sql.id}
           max_retries: 0
 
       # schedule:
