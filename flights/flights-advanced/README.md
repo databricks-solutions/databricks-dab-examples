@@ -20,6 +20,14 @@ Various types of jobs are demonstrated in the `resources` directory.
 - `dlt/flights_dlt_sql.yml` shows the same example of DLT pipeline translated to SQL and job to schedule that pipeline.
 - `dlt/flights_dlt_sql_validation.yml` shows running DLT pipeline in SQL plus added notebook with DLT unit tests in Python.
 
+## GitHub Actions
+These are not enabled for this repository but included as examples of how we would run it. If you want to try with actions you need to have your own GitHub repository and workspace.
+Setup steps:
+1. Create fork of the repository or some type of GitHub repository external to the Databricks organization.
+2. Move the .github folder from this flights_advanced directory into the repository root.
+3. Configure the appropriate [GitHub Secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) to allow serverless connection for unit tests and authorize bundle deployment.
+4. Once these changes are pushed to GitHub, once a PR to a dev or main branch is created the action would run automatically.
+
 ## Getting started
 
 1. Install the Databricks CLI from https://docs.databricks.com/dev-tools/cli/databricks-cli.html
