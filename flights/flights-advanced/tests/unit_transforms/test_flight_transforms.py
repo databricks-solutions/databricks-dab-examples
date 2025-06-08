@@ -1,6 +1,6 @@
 import pytest
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual 
-import sys
+import sys, os
 
 sys.path.append('./src')
 
@@ -10,7 +10,10 @@ from flights.transforms import flight_transforms
 def spark_session():
     try:
         from databricks.connect import DatabricksSession
-        return DatabricksSession.builder.getOrCreate()   
+        if os.environ.get("DBCONNECT_SERVERLESS", "false").lower() == "true":
+            return DatabricksSession.builder.serverless(True).getOrCreate()
+        else:
+            return DatabricksSession.builder.getOrCreate()   
     # except (ValueError, RuntimeError):
     #     from databricks.connect import DatabricksSession
     #     return DatabricksSession.builder.profile("unit_tests").getOrCreate()    
