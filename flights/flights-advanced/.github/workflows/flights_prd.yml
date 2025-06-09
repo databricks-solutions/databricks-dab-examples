@@ -1,0 +1,63 @@
+name: PROD - Deploy flights project
+
+concurrency: 1
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: "Test code and bundle"
+    runs-on: ubuntu-latest
+    environment: prod
+    defaults:
+      run:
+        working-directory: ./flights/flights-advanced
+  
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: databricks/setup-cli@main
+
+      - run: databricks bundle validate --target prod
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+  deploy:
+    name: "Run deploy"
+    runs-on: ubuntu-latest
+    environment: prod
+    defaults:
+      run:
+        working-directory: ./flights/flights-advanced
+
+    needs:
+      - validate
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: databricks/setup-cli@main
+
+      - name: Deploy bundle
+        run: databricks bundle deploy --target prod
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+      - name: Run notebook validation
+        shell: bash
+        run: |
+          set -o pipefail
+          databricks bundle run flights_system_test -t prod
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}

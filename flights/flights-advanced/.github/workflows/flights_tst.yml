@@ -1,0 +1,87 @@
+name: TEST - Validate and deploy flights
+
+concurrency: 1
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
+    branches:
+      - dev
+
+jobs:
+  validate:
+    name: "Test code and bundle"
+    runs-on: ubuntu-latest
+    environment: 'test'
+    defaults:
+      run:
+        working-directory: ./flights/flights-advanced
+ 
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt -r dev-requirements.txt
+
+      #----------------------------------------------
+      #              run test suite
+      #----------------------------------------------
+      - name: Run unit tests
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+          DBCONNECT_SERVERLESS: "true"
+        run: |
+          pytest tests
+     
+      - uses: databricks/setup-cli@main
+
+      - run: databricks bundle validate --target test_automated
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+  deploy:
+    if: github.event.pull_request.merged == true || github.event.pull_request.base.ref == 'main'
+    name: "Run deploy"
+    runs-on: ubuntu-latest
+    environment: 'test'
+    defaults:
+      run:
+        working-directory: ./flights/flights-advanced
+
+    needs:
+      - validate
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: databricks/setup-cli@main
+
+      - name: Deploy bundle
+        run: databricks bundle deploy --auto-approve --target test_automated
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+
+      - name: Run notebook validation
+        shell: bash
+        run: |
+          set -o pipefail
+          databricks bundle run notebook_validation_job --target test_automated --refresh-all 2>&1 | tee output.log
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}

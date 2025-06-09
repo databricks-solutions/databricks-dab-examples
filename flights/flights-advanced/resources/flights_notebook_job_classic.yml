@@ -1,0 +1,22 @@
+# The main job for flights_project
+resources:
+  jobs:
+    flights_notebook_classic:
+      name: flights_advanced_notebook_job_classic_${bundle.target}
+
+      tasks:
+        - task_key: notebook_task
+          job_cluster_key: job_cluster
+          notebook_task:
+            notebook_path: ../src/flights_main_notebook.py
+            base_parameters:
+                catalog: ${var.catalog}
+                database: ${var.database}
+          libraries:
+            - pypi: 
+                package: pytest
+          max_retries: 0
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster: ${var.shared_cluster_config}

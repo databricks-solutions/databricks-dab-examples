@@ -7,20 +7,21 @@ of DAB functionality and best practices for developer workflow and CI/CD (Contin
 ## Repo Structure
 
 The repository is organized into multiple folders, each representing a distinct project:
-- [`flights-simple`](flights-simple): Simple end to end project with workflows & DLT, source code (simple library), tests 
-- [`flights-bundle-template`](flights-bundle-template): Bundle template to deploy a version of [`flights-simple`](flights-simple) with different options:
+- [`flights/flights-simple`](flights/flights-simple):Recommended starting demo, this is a simple end to end project with workflows & DLT, source code (simple library), tests 
+- [`flights/flights-advanced`](flights/flights-advanced): Advanced project that adds many more examples of asset bundle features in an end to end project. This is the one the GitHub Action workflows in .github/workflows/ are setup to use.
+- [`flights/flights-bundle-template`](flights/flights-bundle-template): Bundle template to deploy a version of `flights-simple` with different options:
   - classic or serverless workflows
   - library packaged as wheel or using relative imports
-- [`dais-2024-dab-mod-orch-template`](dais-2024-dab-mod-orch-template): Simple template for DAB
+- [`other_examples/dais-2024-dab-mod-orch-template`](other_examples/dais-2024-dab-mod-orch-template): Simple template for DAB
+- [`other_examples/uv_bundle`](other_examples/uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
 - [`sts-dabs-demo`](sts-dabs-demo) DABs simple project that includes many CICD pipeline definitions
-- [`uv_bundle`](uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
+
 
 ## Getting Started
 The structure of each of the folders varies according to the purpose of the project, but will include:
 - A `README.md` with specific instructions
 - Configuration files (such as a `databricks.yml` file defining the bundle, other YAMLs for resources)
 - Source and test code
-- In some instances, GH actions YAMLs
 
 To use a project in a folder:
 - Navigate to the desired folder
