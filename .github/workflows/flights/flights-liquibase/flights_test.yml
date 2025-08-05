@@ -16,8 +16,8 @@ on:
       - "**/*.py"
 
   push:
-    branches:
-      - feat/liquibase
+#    branches:
+#      - feat/liquibase
     paths:
       - "**/*.yml"
       - "**/*.py"
