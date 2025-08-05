@@ -79,7 +79,7 @@ jobs:
         env:
           LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.DATABRICKS_TOKEN_TST }}
         run: |
-          liquibase/liquibase --changelog-file=liquibase/changelog_test.yml --defaults-file=liquibase/liquibase.properties status --log-level DEBUG
+          liquibase/liquibase --changelog-file=flights/flights-liquibase/liquibase/changelog_test.yml --defaults-file=flights/flights-liquibase/liquibase/liquibase.properties status --log-level DEBUG
 
       #----------------------------------------------
       #   Install dependencies
