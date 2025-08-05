@@ -9,8 +9,8 @@ on:
     types:
       - opened
       - synchronize
-    branches:
-      - dev
+#    branches:
+#      - dev
     paths:
       - "**/*.yml"
       - "**/*.py"
