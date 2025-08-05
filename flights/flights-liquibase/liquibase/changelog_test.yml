@@ -1,0 +1,17 @@
+databaseChangeLog:
+   - changeSet:
+       id: 1
+       author: lorenzo.rubio@databricks.com
+       changes:
+       - createTable:
+           tableName: test_table
+           columns:
+           - column:
+               name: test_id
+               type: INT
+               constraints:
+                   primaryKey:  true
+                   nullable:  false
+           - column:
+               name: test_column
+               type: INT

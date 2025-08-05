@@ -1,0 +1,108 @@
+# This is a Databricks asset bundle definition for databricks-dab-examples.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: flights_simple
+
+include:
+  - resources/*.yml
+  - resources/dlt/*.yml
+
+variables:
+  catalog:
+    default: "main"
+  database:
+    default: ${resources.schemas.project_schema.name}
+  flights_dlt_schema:
+    default: ${resources.schemas.project_schema.name}_dlt
+  flights_test_schema:
+    default: "${resources.schemas.project_schema.name}_validation"
+  spark_version:
+    default: "15.3.x-scala2.12"
+  node_type_id:
+    default: "m6gd.xlarge"
+  shared_cluster_config:
+    type: "complex"
+    default:
+      spark_version: ${var.spark_version}
+      node_type_id: ${var.node_type_id}
+      data_security_mode: USER_ISOLATION
+      autoscale:
+          min_workers: 1
+          max_workers: 2
+
+targets:
+  # The 'dev' target, used for development purposes.
+  # Whenever a developer deploys using 'dev', they get their own copy.
+  dev:
+    # We use 'mode: development' to make sure everything deployed to this target gets a prefix
+    # like '[dev my_user_name]'. Setting this mode also disables any schedules and
+    # automatic triggers for jobs and enables the 'development' mode for Delta Live Tables pipelines.
+    mode: development
+    default: true
+    workspace:
+      host: https://e2-demo-field-eng.cloud.databricks.com/
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    # resource override
+    ## Only create this schema in dev, for other targets manage with Terraform.
+
+    resources:
+      schemas:
+        project_schema:
+          name: flights
+          catalog_name: ${var.catalog}
+          comment: "Schema for flight data"
+
+  test:
+    # For test/staging deployments, we only have a single copy, so we should deploy as 
+    # the same user (Service Principal) ever time.
+    mode: production
+    workspace:
+      host: https://company-tst.cloud.databricks.com/
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
+
+  test_automated:
+    # For test/staging deployments, we only have a single copy, so we should deploy as 
+    # the same user (Service Principal) ever time.
+    mode: production
+    workspace:
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
+      node_type_id: Standard_DS3_v2
+
+  staging:
+    mode: production
+    workspace:
+      host: https://company-stg.cloud.databricks.com/
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: https://company-prd.cloud.databricks.com/
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      # This can run as a specific user or service principal in production.
+      # To run as service principal use service_principal_name (see Databricks documentation).
+      user_name: ${workspace.current_user.userName}
+    variables:
+      database: flights_${bundle.target}
+      flights_dlt_schema: flights_dlt_${bundle.target}
+      flights_test_schema: flights_validation_${bundle.target}

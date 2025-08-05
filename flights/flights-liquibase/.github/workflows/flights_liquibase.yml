@@ -1,0 +1,107 @@
+name: Deploy flights_project to TEST with liquibase
+
+concurrency: 1
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - dev
+    paths:
+      - "**/*.yml"
+      - "**/*.py"
+
+  #push:
+  #  branches:
+  #    - fix/yyyymmdd
+  #  paths:
+  #    - "**/*.yml"
+  #    - "**/*.py"
+
+jobs:
+  deploy:
+    name: "Test and deploy bundle"
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: .
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      #----------------------------------------------
+      #         Set up Java (Temurin JDK 8)
+      #----------------------------------------------
+      - name: Set up Java 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+
+      #----------------------------------------------
+      #    Download Liquibase CLI and make executable
+      #----------------------------------------------
+      - name: Download Liquibase CLI
+        run: |
+          LIQUIBASE_VERSION=4.33.0
+          wget https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz
+          tar -xzf liquibase-${LIQUIBASE_VERSION}.tar.gz
+          mv liquibase-${LIQUIBASE_VERSION} liquibase
+
+      #----------------------------------------------
+      #   Download Databricks JDBC and extension JARs
+      #----------------------------------------------
+      - name: Download Databricks JDBC Driver and Liquibase Extension
+        run: |
+          # Download Databricks JDBC driver
+          wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.7.3/DatabricksJDBC42-2.7.3.1010.zip
+          unzip DatabricksJDBC42-2.7.3.1010.zip
+          mv DatabricksJDBC-2.7.3.1010/DatabricksJDBC42.jar liquibase/lib
+          
+          # Download Liquibase-Databricks extension
+          wget https://github.com/liquibase/liquibase-databricks/releases/download/v1.4.2/liquibase-databricks-1.4.2.jar
+          mv liquibase-databricks-1.4.2.jar liquibase/lib
+
+      #----------------------------------------------
+      #   Run Liquibase connection test (adjust properties as needed)
+      #----------------------------------------------
+      - name: Run Liquibase migration
+        env:
+          LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.DATABRICKS_TOKEN_TST }}
+        run: |
+          liquibase/liquibase --changelog-file=liquibase/changelog_test.yml --defaults-file=liquibase/liquibase.properties status --log-level DEBUG
+
+      #----------------------------------------------
+      #   Install dependencies
+      #----------------------------------------------
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt -r dev-requirements.txt
+
+      #----------------------------------------------
+      #              run test suite
+      #----------------------------------------------
+      - name: Run unit tests
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          DATABRICKS_CLUSTER_ID: ${{ secrets.DATABRICKS_CLUSTER_ID }}
+        run: |
+          pytest tests/ 
+      
+      - uses: databricks/setup-cli@main
+
+      - run: databricks bundle deploy --target test_automated
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          DATABRICKS_BUNDLE_ENV: tst
