@@ -1,5 +1,5 @@
 # Databricks notebook source
-dbutils.widgets.text("catalog", "main")
+dbutils.widgets.text("catalog", "lr_demo")
 dbutils.widgets.text("database", "flights_dev")
 
 # COMMAND ----------
@@ -34,10 +34,9 @@ display(df)
 # MAGIC ## Transform data
 
 # COMMAND ----------
-df_transformed = (
-        df.transform(flight_transforms.delay_type_transform)
-          .transform(shared_transforms.add_metadata_columns)
-    )
+df_transformed = df.transform(flight_transforms.delay_type_transform).transform(
+    shared_transforms.add_metadata_columns
+)
 
 # COMMAND ----------
 
@@ -47,4 +46,4 @@ df_transformed = (
 # COMMAND ----------
 
 df_transformed.write.format("delta").mode("append").saveAsTable(raw_table_name)
-print(f"Succesfully wrote data to {raw_table_name}")
+print(f"Succesfully wrote data to {raw_table_name} for DEMO!")
