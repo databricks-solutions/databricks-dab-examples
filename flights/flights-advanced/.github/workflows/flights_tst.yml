@@ -1,8 +1,6 @@
 name: TEST - Validate and deploy flights
 
-concurrency:
-  group: flights-advanced
-  cancel-in-progress: false
+concurrency: 1
 
 on:
   workflow_dispatch:
