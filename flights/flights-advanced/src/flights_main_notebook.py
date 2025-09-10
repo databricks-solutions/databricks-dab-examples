@@ -46,4 +46,4 @@ df_transformed = df.transform(flight_transforms.delay_type_transform).transform(
 # COMMAND ----------
 
 df_transformed.write.format("delta").mode("append").saveAsTable(raw_table_name)
-print(f"Succesfully wrote data to {raw_table_name} for DEMO!")
+print(f"Succesfully wrote data to {raw_table_name} for DEMO and for Logan!")
