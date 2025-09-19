@@ -14,9 +14,8 @@
     <!-- Root changelog file that automatically includes all other changelog files in the liquibase folder -->
     <!-- This provides a single entry point for managing all database changes -->
     
-    <!-- Automatically include all changelog files in the current directory (excluding this root file) -->
     <!-- Files are included in alphabetical order -->
-    <includeAll path="changelogs/" 
+    <includeAll path="changelogs" 
                 relativeToChangelogFile="true"
                 errorIfMissingOrEmpty="false"/>
     
