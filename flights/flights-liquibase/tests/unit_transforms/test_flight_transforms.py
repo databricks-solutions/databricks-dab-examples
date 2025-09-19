@@ -1,4 +1,4 @@
-import pytest
+import pytest, os
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual 
 
 from flights.transforms import flight_transforms
