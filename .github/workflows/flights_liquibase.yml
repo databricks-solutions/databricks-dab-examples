@@ -21,6 +21,7 @@ on:
     paths:
       - "**/*.yml"
       - "**/*.py"
+      - "**/*.xml"
 
 jobs:
   deploy:

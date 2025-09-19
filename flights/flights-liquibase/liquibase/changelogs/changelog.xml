@@ -13,7 +13,7 @@
 
     <changeSet id="1" author="your.name">
         <createTable tableName="test_table">
-            <column name="test_id" type="int">
+            <column name="test_id1" type="int">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="test_column" type="int"/>
