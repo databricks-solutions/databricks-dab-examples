@@ -16,9 +16,8 @@
     
     <!-- Automatically include all changelog files in the current directory (excluding this root file) -->
     <!-- Files are included in alphabetical order -->
-    <includeAll path="." 
+    <includeAll path="changelogs/" 
                 relativeToChangelogFile="true"
-                filter="changelog*.xml"
                 errorIfMissingOrEmpty="false"/>
     
     <!-- The filter ensures only changelog XML files are included, and this root file is excluded by naming convention -->
