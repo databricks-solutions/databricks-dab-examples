@@ -5,16 +5,17 @@ from flights.transforms import flight_transforms
 
 @pytest.fixture(scope="module")
 def spark_session():
-    try:
-        from databricks.connect import DatabricksSession
-        if os.environ.get("DBCONNECT_SERVERLESS", "false").lower() == "true":
-            return DatabricksSession.builder.serverless(True).getOrCreate()
+    #try:
+    #    from databricks.connect import DatabricksSession
+    if os.environ.get("DBCONNECT_SERVERLESS", "false").lower() == "true":
+        return DatabricksSession.builder.serverless(True).getOrCreate()
       #  else:
       #      return DatabricksSession.builder.getOrCreate()   
     # except (ValueError, RuntimeError):
     #     from databricks.connect import DatabricksSession
     #     return DatabricksSession.builder.profile("unit_tests").getOrCreate()    
-    except (ImportError, ValueError, RuntimeError):
+    #except (ImportError, ValueError, RuntimeError):
+    else:
         print("No Databricks Connect, build and return local SparkSession")
         from pyspark.sql import SparkSession
         return SparkSession.builder.getOrCreate()
