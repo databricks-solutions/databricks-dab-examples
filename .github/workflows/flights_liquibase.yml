@@ -99,6 +99,7 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
           DATABRICKS_CLUSTER_ID: ${{ secrets.DATABRICKS_CLUSTER_ID }}
+          DBCONNECT_SERVERLESS: "true"
         run: |
           pytest flights/flights-liquibase/tests/ 
       
