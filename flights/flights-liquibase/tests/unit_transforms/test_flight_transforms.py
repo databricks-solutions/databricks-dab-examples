@@ -1,8 +1,5 @@
 import pytest
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual 
-import sys
-
-sys.path.append('../../src')
 
 from flights.transforms import flight_transforms
 
