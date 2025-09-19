@@ -20,4 +20,10 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2" author="your.name">
+        <alterTable tableName="test_table">
+            <addColumn name="test_column2" type="int"/>
+        </alterTable>
+    </changeSet>
+
 </databaseChangeLog>
