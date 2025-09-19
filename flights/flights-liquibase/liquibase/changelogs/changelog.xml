@@ -21,9 +21,9 @@
     </changeSet>
 
     <changeSet id="2" author="your.name">
-        <alterTable tableName="test_table">
-            <addColumn name="test_column2" type="int"/>
-        </alterTable>
+        <createTable tableName="test_table_2">
+            <column name="test_column2" type="int"/>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>
