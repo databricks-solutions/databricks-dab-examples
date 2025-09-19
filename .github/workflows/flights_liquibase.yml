@@ -84,7 +84,7 @@ jobs:
       #----------------------------------------------
       - name: Run Liquibase connection test
         env:
-          LIQUIBASE_COMMAND_URL: ${{ secrets.LIQUIBASE_COMMAND_URL }}  # alternative: store only the workspace url and compose the Liquibase URL
+          #LIQUIBASE_COMMAND_URL: ${{ secrets.LIQUIBASE_COMMAND_URL }}  # alternative: store only the workspace url and compose the Liquibase URL
           LIQUIBASE_COMMAND_USERNAME: "token"
           LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.DATABRICKS_TOKEN_TST }}
         run: |
