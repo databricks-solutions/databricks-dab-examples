@@ -1,0 +1,17 @@
+# The main job for flights_project
+resources:
+  jobs:
+    flights_notebook:
+      name: flights_notebook_job_${bundle.target}
+      max_concurrent_runs: 1
+      
+      tasks:
+        - task_key: notebook_task
+          notebook_task:
+            notebook_path: ../src/flights_main_notebook.py
+            base_parameters:
+                catalog: ${var.catalog}
+                database: ${var.database}
+                artifact_path: ${workspace.artifact_path}
+          max_retries: 0
+
