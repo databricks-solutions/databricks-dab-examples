@@ -14,7 +14,7 @@ def spark_session():
     # except (ValueError, RuntimeError):
     #     from databricks.connect import DatabricksSession
     #     return DatabricksSession.builder.profile("unit_tests").getOrCreate()    
-    except ImportError:
+    except (ImportError, ValueError, RuntimeError):
         print("No Databricks Connect, build and return local SparkSession")
         from pyspark.sql import SparkSession
         return SparkSession.builder.getOrCreate()
