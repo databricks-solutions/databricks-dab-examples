@@ -56,7 +56,7 @@ FROM
 
 If you deviate from using the `main` catalog and `default` schema, make sure to provide these variables when deploying the bundle in the next step.
 
-## Deploy to Databricks
+### 2. Deploy to Databricks
 
 In `databricks.yml`, adjust the workspace host URL for the `dev` and `staging` environments. Add more environments as needed.
 
@@ -132,6 +132,8 @@ COMMIT;
 
 > [!NOTE]  
 > psql command line needs to be installed on your local machine. psql is installed when you install postgresql. Alternatively, install libpq to install psql without a full postgresql setup (MacOS, Linux) or select only the command line tools when installing PostgreSQL using the official installer (Windows).
+
+## Run Locally
 
 ### Backend
 
