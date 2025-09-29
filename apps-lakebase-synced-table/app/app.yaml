@@ -1,9 +1,0 @@
-command:
-  - "uvicorn"
-  - "main:app"
-  - "--workers"
-  - "2"
-
-env:
-  - name: PGSCHEMA
-    value: "default"
