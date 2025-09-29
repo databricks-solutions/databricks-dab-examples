@@ -1,0 +1,18 @@
+# Lakebase instance and synced table resources
+# See https://docs.databricks.com/aws/en/dev-tools/bundles/resources for documentation.
+
+resources:
+  database_instances:
+    trips-app-instance:
+      name: trips-app-instance
+      capacity: CU_1
+  synced_database_tables:
+    trips-app-synced-table:
+      name: ${var.catalog}.${var.schema}.trips_synced
+      database_instance_name: ${resources.database_instances.trips-app-instance.name}
+      logical_database_name: trips-app-database
+      spec:
+        source_table_full_name: ${var.catalog}.${var.schema}.trips
+        scheduling_policy: SNAPSHOT
+        primary_key_columns:
+          - id
