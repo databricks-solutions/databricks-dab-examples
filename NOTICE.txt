@@ -7,6 +7,31 @@ This Software contains code from the following open source projects, licensed un
 pytest-dev/pytest - https://github.com/pytest-dev/pytest
 Copyright (c) 2004 Holger Krekel and others
 
+AG-Grid/ag-charts - https://github.com/ag-grid/ag-charts
+Copyright (c) AG Grid Ltd.
+
+AG-Grid/ag-grid - https://github.com/ag-grid/ag-grid
+Copyright (c) AG Grid Ltd.
+
+axios/axios - https://github.com/axios/axios
+Copyright (c) 2014-present Matt Zabriskie & Collaborators
+
+tiangolo/fastapi - https://github.com/tiangolo/fastapi
+Copyright (c) 2018 Sebastián Ramírez
+
+pydantic/pydantic - https://github.com/pydantic/pydantic
+Copyright (c) 2017 to present Samuel Colvin and other contributors
+
+facebook/react - https://github.com/facebook/react
+Copyright (c) Meta Platforms, Inc. and affiliates.
+
+tailwindlabs/tailwindcss - https://github.com/tailwindlabs/tailwindcss
+Copyright (c) Adam Wathan <adam.wathan@gmail.com>
+Copyright (c) Jonathan Reinink <jonathan@reinink.ca>
+
+vitejs/vite - https://github.com/vitejs/vite
+Copyright (c) 2019-present, Yuxi (Evan) You and Vite contributors
+
 ________________
 This Software contains code from the following open source projects, licensed under the BSD 3-Clause license (https://opensource.org/license/bsd-3-clause):
 
@@ -19,3 +44,28 @@ Copyright (c) 2011-2025, Open source contributors.
 scikit-learn/scikit-learn - https://github.com/scikit-learn/scikit-learn
 Copyright (c) 2007-2024 The scikit-learn developers.
 All rights reserved.
+
+encode/uvicorn - https://github.com/encode/uvicorn
+Copyright © 2017-present, Tom Christie.
+All rights reserved.
+
+________________
+This Software contains code from the following open source projects, licensed under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0):
+
+databricks/databricks-sdk-py - https://github.com/databricks/databricks-sdk-py
+Copyright (c) 2023 Databricks, Inc.
+
+microsoft/TypeScript - https://github.com/microsoft/TypeScript
+Copyright (c) Microsoft Corporation.
+
+________________
+This Software contains code from the following open source projects, licensed under the ISC License (https://opensource.org/licenses/ISC):
+
+lucide-icons/lucide - https://github.com/lucide-icons/lucide
+Copyright (c) 2020-present Lucide Contributors
+
+________________
+This Software contains code from the following open source projects, licensed under the GNU Lesser General Public License v3.0 (https://www.gnu.org/licenses/lgpl-3.0.en.html):
+
+psycopg/psycopg - https://github.com/psycopg/psycopg
+Copyright (C) 2020 The Psycopg Team

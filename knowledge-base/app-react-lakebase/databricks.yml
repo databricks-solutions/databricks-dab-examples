@@ -1,0 +1,34 @@
+# This is a Databricks asset bundle definition for apps-lakebase-dabs.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: app-react-lakebase
+
+# Uploads the app/frontend/dist folder when deploying the bundle
+sync:
+  include:
+    - app/frontend/dist
+
+include:
+  - resources/*.yml
+
+# Override the catalog and schema for the synced table
+variables:
+  catalog:
+    default: main
+  schema:
+    default: default
+
+# Add more environments as needed
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://company-dev.cloud.databricks.com/
+
+  staging:
+    mode: production
+    workspace:
+      host: https://company-stg.cloud.databricks.com/
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
