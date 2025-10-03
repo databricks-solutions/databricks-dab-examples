@@ -1,0 +1,560 @@
+{
+  "datasets": [
+    {
+      "name": "2d419c4e",
+      "displayName": "query_duration_pct",
+      "queryLines": [
+        "select\n",
+        "  Date,\n",
+        "  coalesce(`Warehouse Name`, 'All') as `Warehouse Name`,\n",
+        "  measure(`Query Duration Sec P50`) as `Query Duration Sec P50`,\n",
+        "  measure(`Query Duration Sec P90`) as `Query Duration Sec P90`,\n",
+        "  measure(`Query Duration Sec P95`) as `Query Duration Sec P95`\n",
+        "from\n",
+        "  identifier(:catalog || '.' || :schema || '.metv_query_history')\n",
+        "where `Compute Type` = 'Warehouse'\n",
+        "and date between :param_date.min and :param_date.max\n",
+        "group by grouping sets ((date), (date, `Warehouse Name`))\n",
+        "having array_contains(:warehouse_name, `Warehouse Name`)"
+      ],
+      "parameters": [
+        {
+          "displayName": "catalog",
+          "keyword": "catalog",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "users"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "schema",
+          "keyword": "schema",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "chris_koester"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "param_date",
+          "keyword": "param_date",
+          "dataType": "DATE",
+          "complexType": "RANGE",
+          "defaultSelection": {
+            "range": {
+              "dataType": "DATE",
+              "min": {
+                "value": "now-28d/d"
+              },
+              "max": {
+                "value": "now/d"
+              }
+            }
+          }
+        },
+        {
+          "displayName": "warehouse_name",
+          "keyword": "warehouse_name",
+          "dataType": "STRING",
+          "complexType": "MULTI",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "All"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "b1c884db",
+      "displayName": "param_warehouses",
+      "queryLines": [
+        " select distinct warehouse_name as `Warehouse Name`\n",
+        " from identifier(:catalog || '.' || :schema || '.dim_warehouse')\n",
+        " \n",
+        " union all\n",
+        " \n",
+        " select 'All' as `Warehouse Name`"
+      ],
+      "parameters": [
+        {
+          "displayName": "catalog",
+          "keyword": "catalog",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "users"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "schema",
+          "keyword": "schema",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "chris_koester"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a15dfc79",
+      "displayName": "dbsql_usage",
+      "queryLines": [
+        "select\n",
+        "  Date,\n",
+        "  `Account ID`,\n",
+        "  `Workspace Name`,\n",
+        "  `Warehouse Name`,\n",
+        "  measure(`Usage Sum`) as `Usage Sum`\n",
+        "from\n",
+        "  identifier(:catalog || '.' || :schema || '.metv_usage')\n",
+        "Where Date between :param_date.min and :param_date.max\n",
+        "group by all"
+      ],
+      "parameters": [
+        {
+          "displayName": "catalog",
+          "keyword": "catalog",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "users"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "schema",
+          "keyword": "schema",
+          "dataType": "STRING",
+          "defaultSelection": {
+            "values": {
+              "dataType": "STRING",
+              "values": [
+                {
+                  "value": "chris_koester"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "param_date",
+          "keyword": "param_date",
+          "dataType": "DATE",
+          "complexType": "RANGE",
+          "defaultSelection": {
+            "range": {
+              "dataType": "DATE",
+              "min": {
+                "value": "now-14d/d"
+              },
+              "max": {
+                "value": "now/d"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "temp_page_name",
+      "displayName": "Usage",
+      "layout": [
+        {
+          "widget": {
+            "name": "temp_text_box_name",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# DBSQL Usage\n",
+                "    "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "4f0c1343",
+            "queries": [
+              {
+                "name": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f07dfaef341c4095f8893fda6114fc_param_date",
+                "query": {
+                  "datasetName": "a15dfc79",
+                  "parameters": [
+                    {
+                      "name": "param_date",
+                      "keyword": "param_date"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "parameterName": "param_date",
+                    "queryName": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f07dfaef341c4095f8893fda6114fc_param_date"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Date Range"
+              },
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "DATE",
+                    "min": {
+                      "value": "now-60d/d"
+                    },
+                    "max": {
+                      "value": "now/d"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "57c9be2a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a15dfc79",
+                  "fields": [
+                    {
+                      "name": "Warehouse Name",
+                      "expression": "`Warehouse Name`"
+                    },
+                    {
+                      "name": "Date",
+                      "expression": "`Date`"
+                    },
+                    {
+                      "name": "sum(Usage Sum)",
+                      "expression": "SUM(`Usage Sum`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Date"
+                },
+                "y": {
+                  "fieldName": "sum(Usage Sum)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of Usage"
+                },
+                "color": {
+                  "fieldName": "Warehouse Name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Warehouse Name"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "daef3307",
+      "displayName": "Query Duration Pct",
+      "layout": [
+        {
+          "widget": {
+            "name": "8aaeaa08",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Query Duration Percentiles\n",
+                "    "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "24a92698",
+            "queries": [
+              {
+                "name": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f078793c3a185b891e1b439995e72f_param_date",
+                "query": {
+                  "datasetName": "2d419c4e",
+                  "parameters": [
+                    {
+                      "name": "param_date",
+                      "keyword": "param_date"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "parameterName": "param_date",
+                    "queryName": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f078793c3a185b891e1b439995e72f_param_date"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Date Range"
+              },
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "DATE",
+                    "min": {
+                      "value": "now-60d/d"
+                    },
+                    "max": {
+                      "value": "now/d"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "c1022df9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2d419c4e",
+                  "fields": [
+                    {
+                      "name": "Date",
+                      "expression": "`Date`"
+                    },
+                    {
+                      "name": "Query Duration Sec P50",
+                      "expression": "`Query Duration Sec P50`"
+                    },
+                    {
+                      "name": "Query Duration Sec P90",
+                      "expression": "`Query Duration Sec P90`"
+                    },
+                    {
+                      "name": "Query Duration Sec P95",
+                      "expression": "`Query Duration Sec P95`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Date"
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "Query Duration Sec P50",
+                      "displayName": "Query Duration Sec P50"
+                    },
+                    {
+                      "fieldName": "Query Duration Sec P90",
+                      "displayName": "Query Duration Sec P90"
+                    },
+                    {
+                      "fieldName": "Query Duration Sec P95",
+                      "displayName": "Query Duration Sec P95"
+                    }
+                  ]
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "All Warehouses"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "8b851219",
+            "queries": [
+              {
+                "name": "dashboards/01f058247872140182c30b5ac2008695/datasets/01f08e976bce167385c96bbc3cec3acb_Warehouse Name",
+                "query": {
+                  "datasetName": "b1c884db",
+                  "fields": [
+                    {
+                      "name": "Warehouse Name",
+                      "expression": "`Warehouse Name`"
+                    },
+                    {
+                      "name": "Warehouse Name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f08e976bce160c87a475bcb5783c0f_warehouse_name",
+                "query": {
+                  "datasetName": "2d419c4e",
+                  "parameters": [
+                    {
+                      "name": "warehouse_name",
+                      "keyword": "warehouse_name"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "Warehouse Name",
+                    "displayName": "Warehouse Name",
+                    "queryName": "dashboards/01f058247872140182c30b5ac2008695/datasets/01f08e976bce167385c96bbc3cec3acb_Warehouse Name"
+                  },
+                  {
+                    "parameterName": "warehouse_name",
+                    "queryName": "parameter_dashboards/01f058247872140182c30b5ac2008695/datasets/01f08e976bce160c87a475bcb5783c0f_warehouse_name"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Warehouse"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

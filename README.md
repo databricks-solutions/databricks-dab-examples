@@ -12,8 +12,9 @@ The repository is organized into multiple folders, each representing a distinct 
 - [`flights/flights-bundle-template`](flights/flights-bundle-template): Bundle template to deploy a version of `flights-simple` with different options:
   - classic or serverless workflows
   - library packaged as wheel or using relative imports
-- [`other_examples/dais-2024-dab-mod-orch-template`](other_examples/dais-2024-dab-mod-orch-template): Simple template for DAB
-- [`other_examples/uv_bundle`](other_examples/uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
+- [`knowledge-base/dais-2024-dab-mod-orch-template`](knowledge-base/dais-2024-dab-mod-orch-template): Simple template for DAB
+- [`knowledge-base/metric-views`](knowledge-base/metric-views): DAB project including dimensional model, Metric Views, and an AI/BI dashboard
+- [`knowledge-base/uv_bundle`](knowledge-base/uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
 - [`sts-dabs-demo`](sts-dabs-demo) DABs simple project that includes many CICD pipeline definitions
 
 

@@ -1,0 +1,6 @@
+resources:
+  dashboards:
+    dbsql_metrics_dashboard:
+      display_name: 'DBSQL Metrics'
+      file_path: ../src/dbsql_metrics.lvdash.json
+      warehouse_id: ${var.warehouse_id}

@@ -1,0 +1,49 @@
+# This is a Databricks asset bundle definition for dbsql_metrics.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dbsql_metrics
+  uuid: 62b91683-399b-4f8b-97c3-2fa770b29e67
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+sync:
+  exclude:
+    - src/*.lvdash.json
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  warehouse_id:
+    description: Warehouse ID for SQL operations
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://e2-demo-field-eng.cloud.databricks.com/
+    variables:
+      warehouse_id:
+        lookup:
+          warehouse: "Shared Unity Catalog Serverless"
+      catalog: users
+      schema: ${workspace.current_user.short_name}
+
+  prod:
+    mode: production
+    workspace:
+      host: https://company-prd.cloud.databricks.com/
+      root_path: /Workspace/${bundle.name}
+    variables:
+      warehouse_id: 148ccb90800933a1
+      catalog: dbsql_metrics
+      schema: default
