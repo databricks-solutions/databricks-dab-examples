@@ -3,3 +3,4 @@
 /dais-2024-dab-mod-orch-template @daboncanplay
 /sts-dabs-demo @ivancalvo-dbxs
 /uv_bundle @william-conti
+/metric-views @chris-koester-db
