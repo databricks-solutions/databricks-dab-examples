@@ -30,7 +30,7 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://e2-demo-field-eng.cloud.databricks.com/
+      host: https://company-dev.cloud.databricks.com/
     variables:
       warehouse_id:
         lookup:
