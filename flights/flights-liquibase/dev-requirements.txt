@@ -1,0 +1,4 @@
+wheel
+pytest
+databricks-sdk[notebook]==0.35.0
+pandas==2.2.3
