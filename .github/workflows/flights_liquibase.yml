@@ -41,10 +41,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       #----------------------------------------------
       #         Set up Java (Temurin JDK 8)
@@ -110,8 +110,8 @@ jobs:
       
       - uses: databricks/setup-cli@main
 
-      - run: cd flights/flights-liquibase; databricks bundle deploy --target test_automated
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
-          DATABRICKS_BUNDLE_ENV: tst
+#      - run: cd flights/flights-liquibase; databricks bundle deploy --target test_automated
+#        env:
+#          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+#          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
+#          DATABRICKS_BUNDLE_ENV: tst
