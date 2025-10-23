@@ -1,1 +1,1 @@
-databricks-connect==15.4.2
+databricks-connect>=17.0.0
