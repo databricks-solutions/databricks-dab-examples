@@ -1,4 +1,5 @@
 *conf*.json
+!tsconfig*.json
 typings/
 .DS_Store
 __pycache__
