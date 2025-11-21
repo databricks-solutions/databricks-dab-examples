@@ -1,0 +1,79 @@
+# A job running SQL queries on a SQL warehouse
+resources:
+  jobs:
+    dbsql_metrics_job:
+      name: dbsql_metrics
+      
+      tags:
+        workload: dbsql_metrics
+      
+      trigger:
+        # https://docs.databricks.com/api/workspace/jobs/create#trigger
+        periodic:
+          interval: 1
+          unit: DAYS
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+        - name: bundle_target
+          default: ${bundle.target}
+
+      tasks:
+        - task_key: dim_calendar
+          notebook_task:
+            notebook_path: ../src/dim_calendar.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: dim_compute
+          notebook_task:
+            notebook_path: ../src/dim_compute.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: dim_workspace
+          notebook_task:
+            notebook_path: ../src/dim_workspace.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: fct_query_history
+          depends_on:
+            - task_key: dim_calendar
+            - task_key: dim_compute
+            - task_key: dim_workspace
+          notebook_task:
+            notebook_path: ../src/fct_query_history.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: fct_usage
+          depends_on:
+            - task_key: dim_calendar
+            - task_key: dim_compute
+            - task_key: dim_workspace
+          notebook_task:
+            notebook_path: ../src/fct_usage.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: metv_query_history
+          depends_on:
+            - task_key: fct_query_history
+          notebook_task:
+            notebook_path: ../src/metv_query_history.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: metv_usage
+          depends_on:
+            - task_key: fct_usage
+          notebook_task:
+            notebook_path: ../src/metv_usage.ipynb
+            source: WORKSPACE
+            warehouse_id: ${var.warehouse_id}
+        - task_key: refresh_dashboard
+          depends_on:
+            - task_key: metv_query_history
+            - task_key: metv_usage
+          dashboard_task:
+            subscription: {}
+            warehouse_id: ${var.warehouse_id}
+            dashboard_id: ${resources.dashboards.dbsql_metrics_dashboard.id}
