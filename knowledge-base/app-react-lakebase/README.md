@@ -98,7 +98,7 @@ After deployment, the Databricks Apps resource is created but remains in a stopp
 Start the app:
 
 ```bash
-databricks bundle run app -t dev -p my-profile
+databricks bundle run trips-app -t dev -p my-profile
 ```
 
 ### 3. Grant database permissions
