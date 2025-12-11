@@ -1,3 +1,4 @@
+{{ if .include_liquibase }}
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
@@ -22,3 +23,4 @@
     <!-- The filter ensures only changelog XML files are included, and this root file is excluded by naming convention -->
 
 </databaseChangeLog>
+{{ end }}

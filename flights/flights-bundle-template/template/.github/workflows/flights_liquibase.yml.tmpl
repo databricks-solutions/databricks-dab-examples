@@ -1,3 +1,4 @@
+{{ if .include_liquibase }}
 name: Deploy flights_project to TEST with liquibase
 
 concurrency: 1
@@ -29,11 +30,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: test
     env:
-      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
-      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
-      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
-      DATABRICKS_BUNDLE_ENV: tst
+      DATABRICKS_HOST: {{ "${{ secrets.DATABRICKS_HOST }}" }}
+      DATABRICKS_TOKEN: {{ "${{ secrets.DATABRICKS_TOKEN_TST }}" }}
+      DATABRICKS_BUNDLE_ENV: dev  # should be TST, 'dev' is set for demo purposes only
     defaults:
       run:
         working-directory: .
@@ -62,8 +61,8 @@ jobs:
         run: |
           LIQUIBASE_VERSION=4.33.0
           wget https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz
-          mkdir liquibase
-          tar -xzf liquibase-${LIQUIBASE_VERSION}.tar.gz -C liquibase
+          mkdir liquibase_download
+          tar -xzf liquibase-${LIQUIBASE_VERSION}.tar.gz -C liquibase_download
 
       #----------------------------------------------
       #   Download Databricks JDBC and extension JARs
@@ -73,45 +72,51 @@ jobs:
           # Download Databricks JDBC driver
           wget https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.7.3/DatabricksJDBC42-2.7.3.1010.zip
           unzip DatabricksJDBC42-2.7.3.1010.zip
-          mv DatabricksJDBC-2.7.3.1010/DatabricksJDBC42.jar liquibase/lib
+          mv DatabricksJDBC-2.7.3.1010/DatabricksJDBC42.jar liquibase_download/lib
           
           # Download Liquibase-Databricks extension
           wget https://github.com/liquibase/liquibase-databricks/releases/download/v1.4.2/liquibase-databricks-1.4.2.jar
-          mv liquibase-databricks-1.4.2.jar liquibase/lib
+          mv liquibase-databricks-1.4.2.jar liquibase_download/lib
 
       #----------------------------------------------
       #   Run Liquibase connection test
       #----------------------------------------------
       - name: Run Liquibase connection test
         env:
-          LIQUIBASE_COMMAND_URL: ${{ secrets.LIQUIBASE_COMMAND_URL }}  # alternative: store only the workspace url and compose the Liquibase URL
+          LIQUIBASE_COMMAND_URL: {{ "${{ secrets.DATABRICKS_JDBC_URL }}" }}
           LIQUIBASE_COMMAND_USERNAME: "token"
-          LIQUIBASE_COMMAND_PASSWORD: ${{ secrets.DATABRICKS_TOKEN_TST }}
+          LIQUIBASE_COMMAND_PASSWORD: {{ "${{ secrets.DATABRICKS_TOKEN_TST }}" }}
         run: |
-          liquibase/liquibase update --changelog-file=flights/flights-liquibase/liquibase/root.changelog.xml --log-level INFO --defaultsFile=flights/flights-liquibase/liquibase.properties
+          liquibase_download/liquibase update --changelog-file=./liquibase/root.changelog.xml --log-level INFO --defaultsFile=./liquibase.properties
 
       #----------------------------------------------
       #   Install dependencies and package
       #----------------------------------------------
       - run: python -m pip install --upgrade pip
-      - run: pip install -r flights/flights-liquibase/requirements.txt -r flights/flights-liquibase/dev-requirements.txt
-      - run: pip install -e flights/flights-liquibase/
+      - run: pip install -r ./requirements.txt -r ./dev-requirements.txt
+      - run: pip install -e .
 
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
       - name: Run unit tests
         env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
-          DATABRICKS_CLUSTER_ID: ${{ secrets.DATABRICKS_CLUSTER_ID }}
+          DATABRICKS_HOST: {{ "${{ secrets.DATABRICKS_HOST }}" }}
+          DATABRICKS_TOKEN: {{ "${{ secrets.DATABRICKS_TOKEN_TST }}" }}
+          DATABRICKS_SERVERLESS_COMPUTE_ID: "auto"
         run: |
-          pytest flights/flights-liquibase/tests/ 
+          pytest ./tests/
       
       - uses: databricks/setup-cli@main
 
-#      - run: cd flights/flights-liquibase; databricks bundle deploy --target test_automated
-#        env:
-#          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-#          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN_TST }}
-#          DATABRICKS_BUNDLE_ENV: tst
+      #----------------------------------------------
+      #              run job (in staging)
+      #----------------------------------------------
+      - name: Run job (in staging)
+        env:
+          DATABRICKS_HOST: {{ "${{ secrets.DATABRICKS_HOST }}" }}
+          DATABRICKS_TOKEN: {{ "${{ secrets.DATABRICKS_TOKEN_TST }}" }}
+          DATABRICKS_BUNDLE_ENV: dev  # should be TST, 'dev' is set for demo purposes only
+        run: |
+          databricks bundle deploy; databricks bundle run flights_notebook
+{{ end }}
