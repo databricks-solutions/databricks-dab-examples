@@ -57,5 +57,5 @@ df_transformed = (
 
 # COMMAND ----------
 
-df_transformed.write.format("delta").mode("append").saveAsTable(raw_table_name)
+df_transformed.write.format("delta").mode("append").option("mergeSchema", "true").saveAsTable(raw_table_name)
 print(f"Succesfully wrote data to {raw_table_name}")
