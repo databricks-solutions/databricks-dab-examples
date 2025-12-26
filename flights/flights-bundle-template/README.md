@@ -3,6 +3,7 @@
 Template on top of the [flights_simple](../flights-simple) project to enable the following deployment options:
 1. Wheels or relative imports for the project's Python modules
 2. Serverless compute or classic compute for workflows
+3. Liquibase example setup
 
 ## Resources
 A subset of [flights_simple](../flights-simple) resources are currently demonstrated at the [template resources dir](template/resources/).
@@ -49,3 +50,20 @@ A subset of [flights_simple](../flights-simple) resources are currently demonstr
    ```
    $ databricks bundle run flights_notebook --profile <your CLI profile>
    ```
+
+## Liquibase
+If Liquibase is enabled, the template creates a GH action under `./.github/workflows/flights_liquibase.yml` which
+- Downloads the Liquibase CLI + required JDBC driver and jars
+- Runs a liquibase connection test and updates the changelog
+- Runs local tests
+- Deploys the bundle in target env and runs a job
+
+### GH setup
+Liquibase requires the following variables set in GitHub:
+- `DATABRICKS_HOST`: e.g. `dbc-eae35cd0-9e95.cloud.databricks.com`
+- `DATABRICKS_JDBC_URL`: DWH url e.g. `jdbc:databricks://dbc-eae35cd0-9e95.cloud.databricks.com:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=/sql/1.0/warehouses/863bcc7ff8fea25b;`
+- `LIQUIBASE_CATALOG_NAME`: a catalog name e.g. `main`
+- `LIQUIBASE_SCHEMA_NAME`: a schema name e.g. `liquibase_test`
+
+Plus the secret:
+- `DATABRICKS_TOKEN_TST`: Databricks token for deployment environment
