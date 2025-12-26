@@ -1,0 +1,65 @@
+{{ if .include_liquibase }}<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro
+        http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="1" author="your.name">
+        <createTable tableName="test_table">
+            <column name="test_id1" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="test_column" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="your.name">
+        <createTable tableName="test_table_2">
+            <column name="test_column2" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="your.name">
+        <createTable tableName="flights_raw">
+            <column name="Year" type="INT"/>
+            <column name="Month" type="INT"/>
+            <column name="DayofMonth" type="INT"/>
+            <column name="DayOfWeek" type="INT"/>
+            <column name="DepTime" type="STRING"/>
+            <column name="CRSDepTime" type="INT"/>
+            <column name="ArrTime" type="STRING"/>
+            <column name="CRSArrTime" type="INT"/>
+            <column name="UniqueCarrier" type="STRING"/>
+            <column name="FlightNum" type="INT"/>
+            <column name="TailNum" type="STRING"/>
+            <column name="ActualElapsedTime" type="STRING"/>
+            <column name="CRSElapsedTime" type="INT"/>
+            <column name="AirTime" type="STRING"/>
+            <column name="ArrDelay" type="STRING"/>
+            <column name="DepDelay" type="STRING"/>
+            <column name="Origin" type="STRING"/>
+            <column name="Dest" type="STRING"/>
+            <column name="Distance" type="STRING"/>
+            <column name="TaxiIn" type="STRING"/>
+            <column name="TaxiOut" type="STRING"/>
+            <column name="Cancelled" type="INT"/>
+            <column name="CancellationCode" type="STRING"/>
+            <column name="Diverted" type="INT"/>
+            <column name="CarrierDelay" type="STRING"/>
+            <column name="WeatherDelay" type="STRING"/>
+            <column name="NASDelay" type="STRING"/>
+            <column name="SecurityDelay" type="STRING"/>
+            <column name="LateAircraftDelay" type="STRING"/>
+            <column name="IsArrDelayed" type="STRING"/>
+            <column name="IsDepDelayed" type="STRING"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>{{ end }}
