@@ -16,19 +16,25 @@
          "type": "boolean",
          "default": false,
          "description": "Do you want the Databricks workflows to run on serverless?",
-         "order": 2
+         "order": 3
       },
       "catalog": {
          "type": "string",
          "default": "main",
          "description": "Name of your UC catalog for your workflows/DLT?",
-         "order": 2
+         "order": 4
       },
       "database": {
          "type": "string",
          "default": "flights",
          "description": "Name of your UC database for your workflows/DLT?",
-         "order": 2
+         "order": 5
+      },
+      "include_liquibase": {
+         "type": "boolean",
+         "default": false,
+         "description": "Do you want to use liquibase for DataOps data evolution?",
+         "order": 6
       }
    },
    "success_message": "\nYour bundle '{{.project_name}}' has been created."

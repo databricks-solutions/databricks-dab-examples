@@ -1,0 +1,5 @@
+{{ if (ne .include_liquibase true) }}
+    {{ skip `liquibase.properties` }}
+    {{ skip `liquibase` }}
+    {{ skip `.github/workflows/flights_liquibase.yml` }}
+{{ end }}

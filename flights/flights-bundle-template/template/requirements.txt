@@ -1,0 +1,1 @@
+databricks-connect==17.2.*
