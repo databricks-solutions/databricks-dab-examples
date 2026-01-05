@@ -11,7 +11,7 @@
         "  measure(`Query Duration Sec P90`) as `Query Duration Sec P90`,\n",
         "  measure(`Query Duration Sec P95`) as `Query Duration Sec P95`\n",
         "from\n",
-        "  identifier(:catalog || '.' || :schema || '.metv_query_history')\n",
+        "  metv_query_history\n",
         "where `Compute Type` = 'Warehouse'\n",
         "and date between :param_date.min and :param_date.max\n",
         "group by grouping sets ((date), (date, `Warehouse Name`))\n",
