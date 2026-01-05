@@ -112,23 +112,6 @@ targets:
       schema: your_schema
 ```
 
-### 5. Update Dashboard Configuration
-Before deploying the bundle, in the base folder, run the Python script to update the dashboard query parameters for the target environment. The target name and CLI profile are required arguments:
-
-```bash
-$ python src/replace_dashboard_vars.py --target dev --profile DEFAULT
-
-# OR for PROD
-
-$ python src/replace_dashboard_vars.py --target prod --profile PROD
-```
-
-This script:
-- Resolves DAB variables for the specified target
-- Updates the existing dashboard file (`dbsql_metrics.lvdash.json`)
-- Replaces the catalog and schema parameter values
-- Preserves all other dashboard configuration settings
-
 ## Deployment
 
 ### Deploy to Development Environment
@@ -170,5 +153,4 @@ For comprehensive documentation on:
 - `assets/`: Images for README
 - `resources/`: Bundle resource definitions (Jobs, dashboard)
 - `src/`: Source files including notebooks and dashboard
-- `src/replace_dashboard_vars.py`: Script to update dashboard configuration with catalog and schema values
 - `databricks.yml`: Main bundle configuration file

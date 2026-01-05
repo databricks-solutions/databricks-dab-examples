@@ -2,6 +2,7 @@
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
   name: dbsql_metrics
+  databricks_cli_version: ">= 0.281.0"
   uuid: 62b91683-399b-4f8b-97c3-2fa770b29e67
 
 include:

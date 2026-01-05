@@ -4,3 +4,5 @@ resources:
       display_name: 'DBSQL Metrics'
       file_path: ../src/dbsql_metrics.lvdash.json
       warehouse_id: ${var.warehouse_id}
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${var.schema}
