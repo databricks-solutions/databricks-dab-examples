@@ -19,36 +19,6 @@
       ],
       "parameters": [
         {
-          "displayName": "catalog",
-          "keyword": "catalog",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "dbsql_metrics"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "displayName": "schema",
-          "keyword": "schema",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "default"
-                }
-              ]
-            }
-          }
-        },
-        {
           "displayName": "param_date",
           "keyword": "param_date",
           "dataType": "DATE",
@@ -88,44 +58,13 @@
       "displayName": "param_warehouses",
       "queryLines": [
         " select distinct warehouse_name as `Warehouse Name`\n",
-        " from identifier(:catalog || '.' || :schema || '.dim_warehouse')\n",
+        " from dim_warehouse\n",
         " \n",
         " union all\n",
         " \n",
         " select 'All' as `Warehouse Name`"
       ],
-      "parameters": [
-        {
-          "displayName": "catalog",
-          "keyword": "catalog",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "users"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "displayName": "schema",
-          "keyword": "schema",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "chris_koester"
-                }
-              ]
-            }
-          }
-        }
-      ]
+      "parameters": []
     },
     {
       "name": "a15dfc79",
@@ -138,41 +77,11 @@
         "  `Warehouse Name`,\n",
         "  measure(`Usage Sum`) as `Usage Sum`\n",
         "from\n",
-        "  identifier(:catalog || '.' || :schema || '.metv_usage')\n",
+        "  metv_usage\n",
         "Where Date between :param_date.min and :param_date.max\n",
         "group by all"
       ],
       "parameters": [
-        {
-          "displayName": "catalog",
-          "keyword": "catalog",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "users"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "displayName": "schema",
-          "keyword": "schema",
-          "dataType": "STRING",
-          "defaultSelection": {
-            "values": {
-              "dataType": "STRING",
-              "values": [
-                {
-                  "value": "chris_koester"
-                }
-              ]
-            }
-          }
-        },
         {
           "displayName": "param_date",
           "keyword": "param_date",
