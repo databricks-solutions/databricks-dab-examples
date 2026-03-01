@@ -58,7 +58,7 @@
       "displayName": "param_warehouses",
       "queryLines": [
         " select distinct warehouse_name as `Warehouse Name`\n",
-        " from dim_warehouse\n",
+        " from dim_compute\n",
         " \n",
         " union all\n",
         " \n",
