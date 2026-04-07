@@ -1,0 +1,40 @@
+# Declarative Automation Bundle (DAB) configuration; more info here:
+# https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "hello_world"
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+  
+# Define custom variables; more info here:
+# https://docs.databricks.com/en/dev-tools/bundles/reference#variables
+variables:
+  catalog_var:
+    description: Custom variable containing the target catalog
+    default: ""
+targets:
+  # TODO - adjust the catalog names and workspace URLs to match your deployment
+  # The "dev" target used by the bundle deploy feature
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog_var: bu1_dev
+    workspace:
+      host: https://adb-################.#.azuredatabricks.net
+  # The "staging" target used by Azure DevOps
+  staging:
+    mode: production
+    variables:
+      catalog_var: bu1_stg
+    workspace:
+      host: https://adb-################.#.azuredatabricks.net
+      root_path: /Workspace/devops/staging/bu1-team1/.bundle/${bundle.name}
+  # The "prod" target used by Azure DevOps
+  prod:
+    mode: production
+    variables:
+      catalog_var: bu1_prd
+    workspace:
+      host: https://adb-################.#.azuredatabricks.net
+      root_path: /Workspace/devops/prod/bu1-team1/.bundle/${bundle.name}

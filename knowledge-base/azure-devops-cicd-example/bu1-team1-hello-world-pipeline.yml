@@ -1,0 +1,132 @@
+# This triggers the pipeline on a commit to the 'main' branch
+trigger:
+  branches:
+    include:
+    - main
+# Prevents the pipeline from triggering on Pull Requests; only on merges
+pr: none
+stages:
+# -----------------------------------------------
+# Stage 1: Deploy to Staging (automatic on merge)
+# -----------------------------------------------
+# TODO - In the bundle validate/deploy steps below, change "workingDirectory"
+# to the folder containing your databricks.yml and edit the target values if
+# your choice differs from "staging" used in the example below.
+- stage: DeployStaging
+  displayName: 'Deploy to Staging'
+  variables:
+    - group: stagingVariables
+  condition: |
+    eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  jobs:
+  - job: deployStagingJob
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: 3.11
+    - task: AzureCLI@2
+      displayName: 'Get Databricks Token (Staging)'
+      inputs:
+        # TODO - Change azureSubscription value to the name of your DevOps "staging" Service Connection
+        azureSubscription: bu1-team1-staging-svc-conn
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        failOnStandardError: true
+        # Set the token as a pipeline variable for subsequent steps; note that the "echo"
+        # line does not print the token to the pipeline logs. The resource ID is the well-known
+        # Azure AD application ID for Databricks (same for all tenants).
+        inlineScript: |
+          set -e
+          DATABRICKS_TOKEN=$(az account get-access-token --resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d --query "accessToken" -o tsv)
+          echo "##vso[task.setvariable variable=DATABRICKS_TOKEN]$DATABRICKS_TOKEN"
+    # Clone the repository so the bundle files are available to the pipeline agent
+    - checkout: self
+      displayName: 'Checkout repository'
+    # Install Python dependencies here if your bundle requires them
+    # For example:
+    # - script: pip install -r requirements.txt
+    #   displayName: 'Install Python dependencies'
+    - script: |
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+        databricks --version
+      displayName: 'Install Databricks CLI'
+    - script: databricks bundle validate -t staging
+      displayName: 'Validate bundle for the "staging" environment'
+      env:
+        DATABRICKS_HOST: $(DATABRICKS_HOST)
+        DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+      workingDirectory: $(Build.SourcesDirectory)/hello_world
+    - script: databricks bundle deploy -t staging
+      displayName: 'Deploy bundle to the "staging" environment'
+      env:
+        DATABRICKS_HOST: $(DATABRICKS_HOST)
+        DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+      workingDirectory: $(Build.SourcesDirectory)/hello_world
+# -----------------------------------------------
+# Stage 2: Deploy to Production (requires approval in Azure DevOps)
+# -----------------------------------------------
+# TODO - In the bundle validate/deploy steps below, change "workingDirectory"
+# to the folder containing your databricks.yml and edit the target values if
+# your choice differs from "prod" used in the example below.
+- stage: DeployProd
+  displayName: 'Deploy to Prod'
+  dependsOn: DeployStaging
+  condition: succeeded()
+  variables:
+    - group: prodVariables
+  jobs:
+  # A "deployment:" job (rather than a regular "job:") is required to
+  # connect to an Azure DevOps Environment and enable the approval gate.
+  - deployment: deployProdJob
+    displayName: 'Deploy to Prod'
+    pool:
+      vmImage: ubuntu-latest
+    # Setup the approval gate. The value for "environment" must match
+    # the Azure DevOps Environment name where approvals are configured.
+    environment: 'prod'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: UsePythonVersion@0
+            displayName: 'Use Python 3.11'
+            inputs:
+              versionSpec: 3.11
+          - task: AzureCLI@2
+            displayName: 'Get Databricks Token (Prod)'
+            inputs:
+              # TODO - Change azureSubscription value to the name of your DevOps "prod" Service Connection
+              azureSubscription: bu1-team1-prod-svc-conn
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              failOnStandardError: true
+              # Set the token as a pipeline variable for subsequent steps; note that the "echo"
+              # line does not print the token to the pipeline logs. The resource ID is the well-known
+              # Azure AD application ID for Databricks (same for all tenants).
+              inlineScript: |
+                set -e
+                DATABRICKS_TOKEN=$(az account get-access-token --resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d --query "accessToken" -o tsv)
+                echo "##vso[task.setvariable variable=DATABRICKS_TOKEN]$DATABRICKS_TOKEN"
+          # Install Python dependencies here if your bundle requires them
+          # For example:
+          # - script: pip install -r requirements.txt
+          #   displayName: 'Install Python dependencies'
+          - script: |
+              curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+              databricks --version
+            displayName: 'Install Databricks CLI'
+          - script: databricks bundle validate -t prod
+            displayName: 'Validate bundle for the "prod" environment'
+            env:
+              DATABRICKS_HOST: $(DATABRICKS_HOST)
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+            workingDirectory: $(Build.SourcesDirectory)/hello_world
+          - script: databricks bundle deploy -t prod
+            displayName: 'Deploy bundle to the "prod" environment'
+            env:
+              DATABRICKS_HOST: $(DATABRICKS_HOST)
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+            workingDirectory: $(Build.SourcesDirectory)/hello_world

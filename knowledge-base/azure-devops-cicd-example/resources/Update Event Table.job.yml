@@ -1,0 +1,25 @@
+resources:
+  jobs:
+    Update_Event_Table:
+      name: Update Event Table
+      queue:
+        enabled: true
+      parameters:
+        - name: catalog
+          default: ${var.catalog_var}
+        - name: job_run_id
+          default: "job_run_id_{{job.run_id}}"
+      tasks:
+        - task_key: notebook_task_1
+          notebook_task:
+            notebook_path: ../Hello_World.ipynb
+            base_parameters:
+              catalog: ${var.catalog_var}
+              job_run_id: "job_run_id_{{job.run_id}}"
+      email_notifications:
+        on_failure:
+          - your_email@example.com
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
