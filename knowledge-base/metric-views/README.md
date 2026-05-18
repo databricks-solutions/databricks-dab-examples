@@ -1,6 +1,6 @@
 # DBSQL Metrics - Metric Views Example
 
-The DBSQL Metrics project demonstrates how to use [**Databricks Asset Bundles**](https://docs.databricks.com/aws/en/dev-tools/bundles/) with [**Unity Catalog Metric Views**](https://docs.databricks.com/aws/en/metric-views/) to create an end-to-end analytics solution on Databricks. This project deploys a simple dimensional model sourced from [System Tables](https://docs.databricks.com/aws/en/admin/system-tables/), Metric Views, and an AI/BI dashboard, all packaged neatly in a bundle.
+The DBSQL Metrics project demonstrates how to use [**Declarative Automation Bundles**](https://docs.databricks.com/aws/en/dev-tools/bundles/) with [**Unity Catalog Metric Views**](https://docs.databricks.com/aws/en/metric-views/) to create an end-to-end analytics solution on Databricks. This project deploys a simple dimensional model sourced from [System Tables](https://docs.databricks.com/aws/en/admin/system-tables/), Metric Views, and an AI/BI dashboard, all packaged neatly in a bundle.
 
 ![DBSQL Metrics job](assets/dbsql_metrics_job.png "DBSQL Metrics job")
 
@@ -126,7 +126,7 @@ For enhanced development experience, consider installing:
 ## Documentation
 
 For comprehensive documentation on:
-- **Databricks Asset Bundles**: https://docs.databricks.com/dev-tools/bundles/index.html
+- **Declarative Automation Bundles**: https://docs.databricks.com/dev-tools/bundles/index.html
 - **CI/CD configuration**: https://docs.databricks.com/dev-tools/bundles/index.html
 
 ## Project Structure

@@ -1,14 +1,14 @@
 # Databricks DAB Examples 
 
 This repository provides a collection of example projects demonstrating various use cases and best practices for 
-Databricks Asset Bundles (DABs). Each folder in this repo contains a self-contained project showcasing different aspects 
+Declarative Automation Bundles (DABs). Each folder in this repo contains a self-contained project showcasing different aspects 
 of DAB functionality and best practices for developer workflow and CI/CD (Continuous Integration / Continuous Deployment).
 
 ## Repo Structure
 
 The repository is organized into multiple folders, each representing a distinct project:
 - [`flights/flights-simple`](flights/flights-simple):Recommended starting demo, this is a simple end to end project with workflows & DLT, source code (simple library), tests 
-- [`flights/flights-advanced`](flights/flights-advanced): Advanced project that adds many more examples of asset bundle features in an end to end project. This is the one the GitHub Action workflows in .github/workflows/ are setup to use.
+- [`flights/flights-advanced`](flights/flights-advanced): Advanced project that adds many more examples of Declarative Automation Bundle features in an end to end project. This is the one the GitHub Action workflows in .github/workflows/ are setup to use.
 - [`flights/flights-bundle-template`](flights/flights-bundle-template): Bundle template to deploy a version of `flights-simple` with different options:
   - classic or serverless workflows
   - library packaged as wheel or using relative imports
@@ -50,7 +50,7 @@ The installation of the Databricks CLI is a pre-requisite for running any of the
 
 
 ## Docs & Resources
-- [Databricks Asset Bundles Documentation](https://docs.databricks.com/dev-tools/bundles/index.html)
+- [Declarative Automation Bundles Documentation](https://docs.databricks.com/dev-tools/bundles/index.html)
 - [Databricks CLI Documentation](https://docs.databricks.com/dev-tools/cli/databricks-cli.html)
 - [Databricks Connect Documentation](https://docs.databricks.com/en/dev-tools/databricks-connect/python/index.html)
 

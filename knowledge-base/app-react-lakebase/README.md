@@ -1,6 +1,6 @@
 # Databricks App: React + Lakebase + Synced Table
 
-This repository demonstrates how to deploy a [Databricks App](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/), [Lakebase](https://www.databricks.com/product/lakebase) OLTP database, and [synced table](https://docs.databricks.com/aws/en/oltp/instances/sync-data/sync-table) in a [Databricks Asset Bundles (DABs)](https://docs.databricks.com/aws/en/dev-tools/bundles/) bundle.
+This repository demonstrates how to deploy a [Databricks App](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/), [Lakebase](https://www.databricks.com/product/lakebase) OLTP database, and [synced table](https://docs.databricks.com/aws/en/oltp/instances/sync-data/sync-table) in a [Declarative Automation Bundles (DABs)](https://docs.databricks.com/aws/en/dev-tools/bundles/) bundle.
 
 ## Features
 
@@ -10,7 +10,7 @@ This repository demonstrates how to deploy a [Databricks App](https://docs.datab
 - Low-latency queries from a [Lakebase](https://www.databricks.com/product/lakebase) PostgreSQL table.
 - Managed data synchronization from Delta table to Lakebase using [synced tables](https://docs.databricks.com/aws/en/oltp/instances/sync-data/sync-table).
 - [Databricks SDK](https://databricks-sdk-py.readthedocs.io/) for secure OAuth 2.0 based auth with Lakebase.
-- Seamless deployment using [Databricks Asset Bundles (DABs)](https://docs.databricks.com/en/dev-tools/bundles/index.html).
+- Seamless deployment using [Declarative Automation Bundles (DABs)](https://docs.databricks.com/en/dev-tools/bundles/index.html).
 
 ## Architecture
 
