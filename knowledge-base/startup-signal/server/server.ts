@@ -105,6 +105,9 @@ async function doSetup(db: Db): Promise<void> {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
+  // Grant access so other OBO users can query the table.
+  await db.query(`GRANT USAGE ON SCHEMA app TO PUBLIC`);
+  await db.query(`GRANT SELECT, INSERT ON app.customers TO PUBLIC`);
 
   const { rows } = await db.query<{ n: number }>(`SELECT COUNT(*)::int AS n FROM app.customers`);
   if (Number(rows[0].n) === 0) {
@@ -145,7 +148,7 @@ const NewCustomer = z.object({
 function fail(res: Response, err: unknown) {
   const message = err instanceof Error ? err.message : String(err);
   console.error('[startup-signal]', message);
-  res.status(500).json({ error: message });
+  res.status(500).json({ error: 'Internal server error' });
 }
 
 /** Safely coerce an Express query param (string | string[] | ParsedQs) to a trimmed string. */
@@ -234,7 +237,12 @@ async function resolvePgHost(): Promise<void> {
   console.log('[startup-signal] resolved PGHOST =', pgHost);
 }
 
-await resolvePgHost();
+try {
+  await resolvePgHost();
+} catch (err) {
+  console.error('[startup-signal] Failed to resolve PGHOST:', err instanceof Error ? err.message : err);
+  process.exit(1);
+}
 
 const devUser = await resolveDevUser();
 
@@ -301,8 +309,7 @@ await createApp({
               (
                 SELECT COALESCE(SUM(c2.mrr), 0)::float8
                 FROM app.customers c2
-                WHERE c2.status = 'active'
-                  AND date_trunc('month', c2.created_at) <= m.month
+                WHERE date_trunc('month', c2.created_at) <= m.month
               ) AS cumulative_mrr
             FROM months m
             LEFT JOIN app.customers c
