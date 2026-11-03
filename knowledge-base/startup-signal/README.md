@@ -31,7 +31,6 @@ The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-ap
 │   ├── lakebase.branch.yml    # Production branch
 │   └── lakebase.endpoint.yml  # Read-write endpoint
 ├── appkit.plugins.json        # AppKit plugin configuration (lakebase + server)
-├── app.yaml                   # App runtime config
 ├── databricks.yml             # DAB bundle definition
 └── package.json               # Node.js dependencies
 ```
@@ -40,16 +39,17 @@ The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-ap
 
 ### One-click: Open in Databricks
 
-Push this folder to a public GitHub repository, then generate an "Open in Databricks" button at [go/openindatabricks/create](https://go/openindatabricks/create).
+[OPEN_IN_DATABRICKS_BUTTON]
+
+Deploys and starts automatically (~5 min).
 
 ### CLI
 
 ```bash
 databricks bundle deploy
-databricks bundle run startup_signal
 ```
 
-> `bundle deploy` creates the app in a stopped state. `bundle run` starts it.
+> Deploys and starts automatically (~5 min).
 
 ## Local Development
 
