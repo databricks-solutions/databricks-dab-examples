@@ -1,0 +1,11 @@
+resources:
+  postgres_projects:
+    starter:
+      project_id: starter-${workspace.current_user.domain_friendly_name}
+      display_name: starter-${workspace.current_user.domain_friendly_name}
+      pg_version: 17
+      history_retention_duration: 604800s
+      default_endpoint_settings:
+        autoscaling_limit_min_cu: 0.5
+        autoscaling_limit_max_cu: 4
+        suspend_timeout_duration: 300s

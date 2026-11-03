@@ -1,0 +1,8 @@
+resources:
+  postgres_branches:
+    production:
+      branch_id: production
+      parent: ${resources.postgres_projects.starter.name}
+      is_protected: true
+      no_expiry: true
+      replace_existing: true

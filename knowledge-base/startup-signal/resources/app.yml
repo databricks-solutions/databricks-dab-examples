@@ -1,0 +1,26 @@
+resources:
+  apps:
+    startup_signal:
+      name: ${var.app_name}
+      description: "Startup Signal — a live SaaS metrics dashboard backed by Lakebase Postgres. One-click deploy via Open in Databricks."
+      source_code_path: ..
+      compute_size: MEDIUM
+      config:
+        command:
+          - npm
+          - run
+          - start
+        env:
+          - name: LAKEBASE_ENDPOINT
+            value: ${var.lakebase_endpoint}
+          - name: PGDATABASE
+            value: databricks_postgres
+          - name: PGPORT
+            value: "5432"
+          - name: PGSSLMODE
+            value: require
+      user_api_scopes:
+        - postgres
+      permissions:
+        - level: CAN_VIEW
+          user_name: ${workspace.current_user.userName}
