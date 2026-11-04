@@ -23,7 +23,7 @@ This bundle deploys four resources in dependency order:
 
 All resource names are scoped to the deploying user via `${workspace.current_user.domain_friendly_name}`, so two people can deploy in the same workspace without colliding.
 
-The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/appkit) with OBO ("on-behalf-of user") auth — every database query runs as the signed-in Databricks user. On first start, the app auto-seeds ~50 demo customers with realistic SaaS metrics (MRR, plans, churn). The app resolves the Postgres host dynamically at startup via the Databricks REST API using the platform-injected service principal credentials — no hardcoded host, works in any workspace.
+The app uses [AppKit](https://github.com/databricks/appkit) with OBO ("on-behalf-of user") auth — every database query runs as the signed-in Databricks user. On first start, the app auto-seeds ~50 demo customers with realistic SaaS metrics (MRR, plans, churn). The app resolves the Postgres host dynamically at startup via the Databricks REST API using the platform-injected service principal credentials — no hardcoded host, works in any workspace.
 
 > **First-run note:** Schema creation and seeding run lazily on the first authenticated request using the requesting user's OBO credentials. The person who deployed the bundle owns the Lakebase project and is its first user, so setup runs with owner rights. By default only the deployer can use the app. To share it, grant users CAN_USE on the app and create a Postgres role for each user in the Lakebase project. Otherwise their requests fail.
 
@@ -49,7 +49,7 @@ The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-ap
 
 ### One-click: Open in Databricks
 
-[OPEN_IN_DATABRICKS_BUTTON]
+An Open in Databricks button will be added here once this example is published.
 
 Deploys and starts automatically (~5 min).
 
@@ -76,7 +76,7 @@ npm run dev
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express, [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/appkit) lakebase plugin (OBO auth)
+- **Backend**: Node.js, Express, [AppKit](https://github.com/databricks/appkit) lakebase plugin (OBO auth)
 - **Frontend**: React, TypeScript, Vite, Tailwind CSS
 - **Database**: [Lakebase Autoscaling Postgres](https://www.databricks.com/product/lakebase)
 - **UI**: AppKit UI components, shadcn/ui
