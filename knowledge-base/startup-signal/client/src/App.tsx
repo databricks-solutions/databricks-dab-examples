@@ -395,7 +395,7 @@ function ChartsRow({ version }: { version: number }) {
       <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Cumulative active MRR</CardTitle>
-          <CardDescription>Sum of active customer MRR by month · last 12 months</CardDescription>
+          <CardDescription>Sum of MRR from currently active customers, by signup month · last 12 months</CardDescription>
         </CardHeader>
         <CardContent>
           {tError ? (

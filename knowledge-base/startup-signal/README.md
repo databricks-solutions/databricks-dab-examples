@@ -1,18 +1,16 @@
 # Startup Signal: React + Lakebase Postgres App
 
-A live SaaS metrics dashboard backed by Lakebase Postgres. One click deploys the app **and** provisions a fresh Lakebase Postgres instance into your workspace — no manual configuration, no hardcoded values. Designed as a one-click [Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) starter for startups.
+A live SaaS metrics dashboard backed by Lakebase Postgres. One click deploys the app **and** provisions a fresh Lakebase Postgres instance into your workspace — no manual configuration, no hardcoded values. Designed as a one-click Open in Databricks starter for startups.
 
 ## What is Open in Databricks?
 
-[Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) is a one-click deployment flow for DABs hosted in a public GitHub repo. A user clicks the button, signs in at login.databricks.com, and lands in a workspace with the bundle imported and ready to run — no CLI, no local setup. The platform runs `databricks bundle deploy` for them.
+Open in Databricks is a one-click deployment flow for DABs hosted in a public GitHub repo. A user clicks the button and lands in a workspace with the bundle imported and ready to run — no CLI, no local setup. The platform runs `databricks bundle deploy` for them.
 
-A DAB (Declarative Automation Bundle) packages a whole project — notebooks, jobs, pipelines, dashboards, apps — into one deployable unit. Package a solution as a DAB, and a customer can deploy the whole thing with one click. Across developer tools, one-click consumption is the norm (Open in Colab, Deploy to Vercel, Deploy to Heroku); Open in Databricks brings the same to Databricks assets.
+A DAB (Declarative Automation Bundle) packages a whole project — notebooks, jobs, pipelines, dashboards, apps — into one deployable unit. Package a solution as a DAB, and a customer can deploy the whole thing with one click.
 
 This bundle is designed for that flow: a single `bundle deploy` provisions the Lakebase Postgres project, branch, endpoint, and the Databricks App, then auto-starts the app via `lifecycle.started: true`. No `bundle run` or manual UI clicks are needed after deploy.
 
-> **Workspace requirement:** A Databricks workspace will be available when configuring the Open in Databricks button.
-
-[OPEN_IN_DATABRICKS_BUTTON]
+> No Databricks account? The button walks you through a free trial signup, then deploys into your new workspace.
 
 ## Architecture
 
@@ -27,7 +25,7 @@ All resource names are scoped to the deploying user via `${workspace.current_use
 
 The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/appkit) with OBO ("on-behalf-of user") auth — every database query runs as the signed-in Databricks user. On first start, the app auto-seeds ~50 demo customers with realistic SaaS metrics (MRR, plans, churn). The app resolves the Postgres host dynamically at startup via the Databricks REST API using the platform-injected service principal credentials — no hardcoded host, works in any workspace.
 
-> **First-run note:** Schema creation and seeding run lazily on the first authenticated request using the requesting user's OBO credentials. The account admin who deployed the bundle should open the app first to initialize the schema. After that, any user with access to the app can query and insert data.
+> **First-run note:** Schema creation and seeding run lazily on the first authenticated request using the requesting user's OBO credentials. The person who deployed the bundle owns the Lakebase project and is its first user, so setup runs with owner rights. By default only the deployer can use the app. To share it, grant users CAN_USE on the app and create a Postgres role for each user in the Lakebase project. Otherwise their requests fail.
 
 ## Project Structure
 
@@ -65,6 +63,8 @@ databricks bundle deploy
 >
 > If your username is longer than 26 characters, override the app name:
 > `databricks bundle deploy --var app_name=your-short-name`
+>
+> The app runs continuously (~0.5 DBU/hr). Stop it in Compute > Apps or run `databricks bundle destroy` when done.
 
 ## Local Development
 
@@ -73,8 +73,6 @@ cp .env.example .env  # set DATABRICKS_HOST
 npm install
 npm run dev
 ```
-
-> The app runs continuously (~0.5 DBU/hr). Stop it in Compute > Apps or run `databricks bundle destroy` when done.
 
 ## Tech Stack
 
