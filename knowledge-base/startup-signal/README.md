@@ -4,7 +4,11 @@ A live SaaS metrics dashboard backed by Lakebase Postgres. One click deploys the
 
 ## What is Open in Databricks?
 
-[Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) is a one-click deployment flow for Databricks Asset Bundles (DABs) hosted in a public GitHub repository. Users click a button, pick a workspace, and the platform runs `databricks bundle deploy` for them — no CLI, no local setup. This bundle is designed to work with that flow: a single `bundle deploy` provisions the Lakebase Postgres project, branch, endpoint, and the Databricks App, then auto-starts the app via `lifecycle.started: true`. No `bundle run` or manual UI clicks are needed after deploy.
+[Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) is a one-click deployment flow for DABs hosted in a public GitHub repo. A user clicks the button, signs in at login.databricks.com, and lands in a workspace with the bundle imported and ready to run — no CLI, no local setup. The platform runs `databricks bundle deploy` for them.
+
+A DAB (Declarative Automation Bundle) packages a whole project — notebooks, jobs, pipelines, dashboards, apps — into one deployable unit. Package a solution as a DAB, and a customer can deploy the whole thing with one click. Across developer tools, one-click consumption is the norm (Open in Colab, Deploy to Vercel, Deploy to Heroku); Open in Databricks brings the same to Databricks assets.
+
+This bundle is designed for that flow: a single `bundle deploy` provisions the Lakebase Postgres project, branch, endpoint, and the Databricks App, then auto-starts the app via `lifecycle.started: true`. No `bundle run` or manual UI clicks are needed after deploy.
 
 [OPEN_IN_DATABRICKS_BUTTON]
 
