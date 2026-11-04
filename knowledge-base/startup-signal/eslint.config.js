@@ -14,7 +14,7 @@ export default tseslint.config(
       '**/.next/**',
       '**/coverage/**',
       'client/dist/**',
-      '**.databricks/**',
+      '**/.databricks/**',
     ],
   },
   js.configs.recommended,

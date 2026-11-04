@@ -55,9 +55,11 @@ databricks bundle deploy
 
 ```bash
 cp .env.example .env  # set DATABRICKS_HOST
-npm install --legacy-peer-deps
+npm install
 npm run dev
 ```
+
+> The app runs continuously (~0.5 DBU/hr). Stop it in Compute > Apps or run `databricks bundle destroy` when done.
 
 ## Tech Stack
 

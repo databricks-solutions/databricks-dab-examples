@@ -105,9 +105,10 @@ async function doSetup(db: Db): Promise<void> {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
-  // Grant access so other OBO users can query the table.
+  // Grant access so other OBO users can query and insert into the table.
   await db.query(`GRANT USAGE ON SCHEMA app TO PUBLIC`);
   await db.query(`GRANT SELECT, INSERT ON app.customers TO PUBLIC`);
+  await db.query(`GRANT USAGE ON SEQUENCE app.customers_id_seq TO PUBLIC`);
 
   const { rows } = await db.query<{ n: number }>(`SELECT COUNT(*)::int AS n FROM app.customers`);
   if (Number(rows[0].n) === 0) {
@@ -309,7 +310,8 @@ await createApp({
               (
                 SELECT COALESCE(SUM(c2.mrr), 0)::float8
                 FROM app.customers c2
-                WHERE date_trunc('month', c2.created_at) <= m.month
+                WHERE c2.status = 'active'
+                  AND date_trunc('month', c2.created_at) <= m.month
               ) AS cumulative_mrr
             FROM months m
             LEFT JOIN app.customers c

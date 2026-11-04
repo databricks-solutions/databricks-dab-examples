@@ -23,6 +23,3 @@ resources:
             value: require
       user_api_scopes:
         - postgres
-      permissions:
-        - level: CAN_VIEW
-          user_name: ${workspace.current_user.userName}

@@ -394,8 +394,8 @@ function ChartsRow({ version }: { version: number }) {
     <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>MRR has grown every month</CardTitle>
-          <CardDescription>Cumulative active monthly recurring revenue · last 12 months</CardDescription>
+          <CardTitle>Cumulative active MRR</CardTitle>
+          <CardDescription>Sum of active customer MRR by month · last 12 months</CardDescription>
         </CardHeader>
         <CardContent>
           {tError ? (
