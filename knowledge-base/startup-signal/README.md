@@ -2,6 +2,10 @@
 
 A live SaaS metrics dashboard backed by Lakebase Postgres. One click deploys the app **and** provisions a fresh Lakebase Postgres instance into your workspace — no manual configuration, no hardcoded values. Designed as a one-click [Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) starter for startups.
 
+## What is Open in Databricks?
+
+[Open in Databricks](https://docs.databricks.com/aws/en/dev-tools/bundles/open-in-databricks) is a one-click deployment flow for Databricks Asset Bundles (DABs) hosted in a public GitHub repository. Users click a button, pick a workspace, and the platform runs `databricks bundle deploy` for them — no CLI, no local setup. This bundle is designed to work with that flow: a single `bundle deploy` provisions the Lakebase Postgres project, branch, endpoint, and the Databricks App, then auto-starts the app via `lifecycle.started: true`. No `bundle run` or manual UI clicks are needed after deploy.
+
 [OPEN_IN_DATABRICKS_BUTTON]
 
 ## Architecture
@@ -16,6 +20,8 @@ This bundle deploys four resources in dependency order:
 All resource names are scoped to the deploying user via `${workspace.current_user.domain_friendly_name}`, so two people can deploy in the same workspace without colliding.
 
 The app uses [AppKit](https://docs.databricks.com/aws/en/dev-tools/databricks-apps/appkit) with OBO ("on-behalf-of user") auth — every database query runs as the signed-in Databricks user. On first start, the app auto-seeds ~50 demo customers with realistic SaaS metrics (MRR, plans, churn). The app resolves the Postgres host dynamically at startup via the Databricks REST API using the platform-injected service principal credentials — no hardcoded host, works in any workspace.
+
+> **First-run note:** Schema creation and seeding run lazily on the first authenticated request using the requesting user's OBO credentials. The account admin who deployed the bundle should open the app first to initialize the schema. After that, any user with access to the app can query and insert data.
 
 ## Project Structure
 
@@ -50,6 +56,9 @@ databricks bundle deploy
 ```
 
 > Deploys and starts automatically (~5 min).
+>
+> If your username is longer than 26 characters, override the app name:
+> `databricks bundle deploy --var app_name=your-short-name`
 
 ## Local Development
 

@@ -89,6 +89,11 @@ function generateSeed(): SeedRow[] {
 }
 
 // ---- Lazy, idempotent schema init + seed (runs once per process) ----------
+// Schema creation (CREATE SCHEMA/TABLE, GRANT, seed INSERT) runs lazily on the
+// first authenticated request. Because queries use OBO (asUser) credentials, the
+// first visitor must have DDL privileges on the Lakebase project — typically the
+// account admin who deployed the bundle. Once the schema and grants exist, any
+// user with access to the app can query and insert data.
 let readyPromise: Promise<void> | null = null;
 
 async function doSetup(db: Db): Promise<void> {
@@ -105,7 +110,9 @@ async function doSetup(db: Db): Promise<void> {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
-  // Grant access so other OBO users can query and insert into the table.
+  // Grant access so all OBO users (not just the schema owner) can query and insert.
+  // TO PUBLIC is appropriate here because access is already gated by the app's
+  // Databricks permissions — only users with access to the app can reach the DB.
   await db.query(`GRANT USAGE ON SCHEMA app TO PUBLIC`);
   await db.query(`GRANT SELECT, INSERT ON app.customers TO PUBLIC`);
   await db.query(`GRANT USAGE ON SEQUENCE app.customers_id_seq TO PUBLIC`);
@@ -185,6 +192,10 @@ async function resolveDevUser(): Promise<string | undefined> {
  * (DATABRICKS_CLIENT_ID / DATABRICKS_CLIENT_SECRET — both injected by the platform)
  * and call the Postgres REST API to fetch the endpoint's host. This makes the DAB
  * portable — no hardcoded host, works in any workspace.
+ *
+ * Note: the SDK's built-in credential providers were tried first but crashed at
+ * runtime due to header/token mismatches in the AppKit runtime context. The manual
+ * OAuth exchange is more reliable here and has no extra dependencies.
  */
 async function resolvePgHost(): Promise<void> {
   if (process.env.PGHOST) return; // Platform already injected it.
@@ -306,7 +317,7 @@ await createApp({
             SELECT
               to_char(m.month, 'Mon ''YY')                                      AS month,
               (COALESCE(SUM(c.mrr) FILTER (WHERE c.status = 'active'), 0))::float8 AS new_mrr,
-              COUNT(c.id)::int                                                   AS new_customers,
+              (COUNT(c.id) FILTER (WHERE c.status = 'active'))::int               AS new_customers,
               (
                 SELECT COALESCE(SUM(c2.mrr), 0)::float8
                 FROM app.customers c2
