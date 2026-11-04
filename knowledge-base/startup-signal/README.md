@@ -10,7 +10,7 @@ A DAB (Declarative Automation Bundle) packages a whole project — notebooks, jo
 
 This bundle is designed for that flow: a single `bundle deploy` provisions the Lakebase Postgres project, branch, endpoint, and the Databricks App, then auto-starts the app via `lifecycle.started: true`. No `bundle run` or manual UI clicks are needed after deploy.
 
-> **Workspace requirement:** Open in Databricks deploys into an existing Databricks workspace. Users who don't have one yet can sign up for a free trial at [login.databricks.com](https://login.databricks.com) — the Open in Databricks flow will prompt them to create or select a workspace during the flow.
+> **Workspace requirement:** A Databricks workspace will be available when configuring the Open in Databricks button.
 
 [OPEN_IN_DATABRICKS_BUTTON]
 
