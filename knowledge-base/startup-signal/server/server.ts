@@ -194,8 +194,8 @@ async function resolveDevUser(): Promise<string | undefined> {
  * portable — no hardcoded host, works in any workspace.
  *
  * Note: the SDK's built-in credential providers were tried first but crashed at
- * runtime due to header/token mismatches in the AppKit runtime context. The manual
- * OAuth exchange is more reliable here and has no extra dependencies.
+ * runtime due to header/token mismatches in the AppKit runtime context. This direct
+ * fetch approach is more reliable here and has no extra dependencies.
  */
 async function resolvePgHost(): Promise<void> {
   if (process.env.PGHOST) return; // Platform already injected it.
