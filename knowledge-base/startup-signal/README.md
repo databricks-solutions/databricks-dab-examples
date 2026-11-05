@@ -21,7 +21,7 @@ This bundle deploys four resources in dependency order:
 3. **Read-write endpoint** — autoscaling 0.5–4 CU, suspend after 5 min
 4. **Databricks App** — React + Express dashboard wired to the endpoint
 
-All resource names are scoped to the deploying user via `${workspace.current_user.domain_friendly_name}`, so two people can deploy in the same workspace without colliding.
+All Lakebase resource names are scoped to the deploying user via `${workspace.current_user.domain_friendly_name}`, so two people can deploy in the same workspace without colliding. The app uses a fixed name (`startup-signal`) so it always fits within the 30-character limit.
 
 The app uses [AppKit](https://github.com/databricks/appkit) with OBO ("on-behalf-of user") auth — every database query runs as the signed-in Databricks user. On first start, the app auto-seeds ~50 demo customers with realistic SaaS metrics (MRR, plans, churn). The app resolves the Postgres host dynamically at startup via the Databricks REST API using the platform-injected service principal credentials — no hardcoded host, works in any workspace.
 
@@ -60,9 +60,6 @@ databricks bundle deploy
 ```
 
 > Deploys and starts automatically (~5 min).
->
-> If your username is longer than 26 characters, override the app name:
-> `databricks bundle deploy --var app_name=your-short-name`
 >
 > The app runs continuously (~0.5 DBU/hr). Stop it in Compute > Apps or run `databricks bundle destroy` when done.
 

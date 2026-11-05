@@ -7,7 +7,7 @@ include:
 variables:
   app_name:
     description: "App name (lowercase, digits, hyphens; max 30 chars)"
-    default: sig-${workspace.current_user.domain_friendly_name}
+    default: startup-signal
 
 targets:
   default:
