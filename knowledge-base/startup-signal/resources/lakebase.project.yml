@@ -7,5 +7,5 @@ resources:
       history_retention_duration: 604800s
       default_endpoint_settings:
         autoscaling_limit_min_cu: 0.5
-        autoscaling_limit_max_cu: 4
+        autoscaling_limit_max_cu: 1
         suspend_timeout_duration: 300s
