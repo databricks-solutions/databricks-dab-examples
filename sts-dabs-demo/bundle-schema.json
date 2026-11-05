@@ -321,7 +321,7 @@
                 "properties": {
                   "kind": {
                     "type": "string",
-                    "description": "The kind of deployment that manages the job.\n\n* `BUNDLE`: The job is managed by Databricks Asset Bundle."
+                    "description": "The kind of deployment that manages the job.\n\n* `BUNDLE`: The job is managed by Declarative Automation Bundle."
                   },
                   "metadata_file_path": {
                     "type": "string",
@@ -5361,7 +5361,7 @@
                       "properties": {
                         "kind": {
                           "type": "string",
-                          "description": "The kind of deployment that manages the job.\n\n* `BUNDLE`: The job is managed by Databricks Asset Bundle."
+                          "description": "The kind of deployment that manages the job.\n\n* `BUNDLE`: The job is managed by Declarative Automation Bundle."
                         },
                         "metadata_file_path": {
                           "type": "string",

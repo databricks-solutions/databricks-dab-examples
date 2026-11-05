@@ -1,4 +1,4 @@
-# This is a Databricks asset bundle definition for databricks-dab-examples.
+# This is a Declarative Automation Bundle definition for databricks-dab-examples.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 bundle:
   name: flights_simple

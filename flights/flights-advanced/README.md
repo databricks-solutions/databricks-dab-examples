@@ -61,7 +61,7 @@ Setup steps:
    https://docs.databricks.com/dev-tools/vscode-ext.html. Or read the "getting started" documentation for
    **Databricks Connect** for instructions on running the included Python code from a different IDE.
 
-7. For documentation on the Databricks asset bundles format used
+7. For documentation on the Declarative Automation Bundles format used
    for this project, and for CI/CD configuration, see
    https://docs.databricks.com/dev-tools/bundles/index.html.
 
