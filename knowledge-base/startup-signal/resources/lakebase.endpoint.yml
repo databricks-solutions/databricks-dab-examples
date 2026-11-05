@@ -1,0 +1,10 @@
+resources:
+  postgres_endpoints:
+    primary:
+      endpoint_id: primary
+      parent: ${resources.postgres_branches.production.name}
+      endpoint_type: ENDPOINT_TYPE_READ_WRITE
+      autoscaling_limit_min_cu: 0.5
+      autoscaling_limit_max_cu: 4
+      suspend_timeout_duration: 300s
+      replace_existing: true

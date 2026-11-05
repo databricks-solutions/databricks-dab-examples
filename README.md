@@ -15,6 +15,7 @@ The repository is organized into multiple folders, each representing a distinct 
 - [`knowledge-base/dais-2024-dab-mod-orch-template`](knowledge-base/dais-2024-dab-mod-orch-template): Simple template for DAB
 - [`knowledge-base/metric-views`](knowledge-base/metric-views): DAB project including dimensional model, Metric Views, and an AI/BI dashboard
 - [`knowledge-base/uv_bundle`](knowledge-base/uv_bundle) DAB project that includes uv as a package manager. Also includes unit testing examples with [databricks-connect](https://docs.databricks.com/aws/en/dev-tools/databricks-connect/python)
+- [`knowledge-base/startup-signal`](knowledge-base/startup-signal) React + Express SaaS metrics dashboard backed by Lakebase Postgres, designed for one-click Open in Databricks deployment
 - [`sts-dabs-demo`](sts-dabs-demo) DABs simple project that includes many CICD pipeline definitions
 
 

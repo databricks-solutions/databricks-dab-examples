@@ -1,0 +1,14 @@
+bundle:
+  name: startup-signal
+
+include:
+  - resources/*.yml
+
+variables:
+  app_name:
+    description: "App name (lowercase, digits, hyphens; max 30 chars)"
+    default: startup-signal
+
+targets:
+  default:
+    mode: development
